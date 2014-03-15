@@ -51,9 +51,8 @@
 # input clocks. You can use these to time your system. If required
 # commented constraints can be used in the top level xdc 
 #----------------------------------------------------------------
-# Connect to input port when clock capable pin is selected for input
-create_clock -period 10.0 [get_ports clk_100MHz]
-set_input_jitter [get_clocks -of_objects [get_ports clk_100MHz]] 0.1
+#create_clock -period 10.0 [get_ports clk_100MHz]
+#set_input_jitter [get_clocks -of_objects [get_ports clk_100MHz]] 0.1
 
 
 

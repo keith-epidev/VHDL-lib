@@ -101,7 +101,7 @@ leds(7 downto 2) <= (others=>'0');
 
 
 
-process(clk_1923Hz) begin
+process(clk_193MHz) begin
     if(clk_193MHz'event and clk_193MHz='1')then
     
         if(hscnt < 1920 and vscnt < 1200)then

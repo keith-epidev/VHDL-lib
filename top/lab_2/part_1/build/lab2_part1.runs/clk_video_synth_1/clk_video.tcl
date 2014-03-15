@@ -9,14 +9,13 @@ create_project -in_memory -part xc7z020clg484-1
 set_property target_language VHDL [current_project]
 set_property board em.avnet.com:zynq:zed:d [current_project]
 set_param project.compositeFile.enableAutoGeneration 0
+set_property constrs_type UCF [current_fileset -constrset]
 
 read_ip /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video.xci
+set_property used_in_implementation false [get_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video.dcp]
 set_msg_config -id {IP_Flow 19-2162} -severity warning -new_severity info
 set_property is_locked true [get_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video.xci]
 
-read_xdc dont_touch.xdc
-set_property used_in_implementation false [get_files dont_touch.xdc]
-set_param synth.vivado.isSynthRun true
 set_property webtalk.parent_dir /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.data/wt [current_project]
 set_property parent.project_dir /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build [current_project]
 synth_design -top clk_video -part xc7z020clg484-1 -mode out_of_context

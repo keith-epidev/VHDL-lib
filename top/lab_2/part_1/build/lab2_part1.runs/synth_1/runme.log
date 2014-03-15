@@ -17,3 +17,366 @@ WARNING: [Common 17-301] Failed to get a license: Synthesis
 Loading parts and site information from /opt/Xilinx/Vivado/2013.4/data/parts/arch.xml
 Parsing RTL primitives file [/opt/Xilinx/Vivado/2013.4/data/parts/xilinx/rtl/prims/rtl_prims.xml]
 Finished parsing RTL primitives file [/opt/Xilinx/Vivado/2013.4/data/parts/xilinx/rtl/prims/rtl_prims.xml]
+source top.tcl
+# set_param gui.test TreeTableDev
+# set_msg_config -id {HDL 9-1061} -limit 100000
+# set_msg_config -id {HDL 9-1654} -limit 100000
+# create_project -in_memory -part xc7z020clg484-1
+# set_property target_language VHDL [current_project]
+# set_property board em.avnet.com:zynq:zed:d [current_project]
+# set_param project.compositeFile.enableAutoGeneration 0
+# add_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/clk_base_synth_1/clk_base.dcp
+# set_property used_in_implementation false [get_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/clk_base_synth_1/clk_base.dcp]
+# set_property use_blackbox_stub false [get_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/clk_base_synth_1/clk_base.dcp]
+# add_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/clk_video_synth_1/clk_video.dcp
+# set_property used_in_implementation false [get_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/clk_video_synth_1/clk_video.dcp]
+# set_property use_blackbox_stub false [get_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/clk_video_synth_1/clk_video.dcp]
+# read_verilog {
+#   /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_base/clk_base_stub.v
+#   /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video_stub.v
+# }
+# read_vhdl {
+#   /home/keith/Documents/VHDL-lib/top/lab_2/part_1/vga.vhd
+#   /home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.vhd
+# }
+# read_xdc /home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.xdc
+INFO: [Project 1-11] Changing the constrs_type of fileset 'constrs_1' to 'XDC'.
+# set_property used_in_implementation false [get_files /home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.xdc]
+# read_xdc dont_buffer.xdc
+# set_property used_in_implementation false [get_files dont_buffer.xdc]
+# set_param synth.vivado.isSynthRun true
+# set_property webtalk.parent_dir /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.data/wt [current_project]
+# set_property parent.project_dir /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build [current_project]
+# synth_design -top top -part xc7z020clg484-1
+Command: synth_design -top top -part xc7z020clg484-1
+
+Starting synthesis...
+
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z020'
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 773.703 ; gain = 151.398
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'top' [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.vhd:46]
+INFO: [Synth 8-3491] module 'clk_base' declared at '/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_base/clk_base_stub.v:16' bound to instance 'clk_base1' of component 'clk_base' [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.vhd:96]
+INFO: [Synth 8-638] synthesizing module 'clk_base' [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_base/clk_base_stub.v:16]
+INFO: [Synth 8-3491] module 'clk_video' declared at '/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video_stub.v:16' bound to instance 'clk_video1' of component 'clk_video' [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.vhd:97]
+INFO: [Synth 8-638] synthesizing module 'clk_video' [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video_stub.v:16]
+	Parameter Hsync bound to: 208 - type: integer 
+	Parameter Hact bound to: 1920 - type: integer 
+	Parameter Hfp bound to: 128 - type: integer 
+	Parameter Hbp bound to: 336 - type: integer 
+	Parameter Vsync bound to: 3 - type: integer 
+	Parameter Vact bound to: 1200 - type: integer 
+	Parameter Vfp bound to: 1 - type: integer 
+	Parameter Vbp bound to: 38 - type: integer 
+INFO: [Synth 8-3491] module 'vga' declared at '/home/keith/Documents/VHDL-lib/top/lab_2/part_1/vga.vhd:7' bound to instance 'vga1' of component 'vga' [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.vhd:98]
+INFO: [Synth 8-638] synthesizing module 'vga__parameterized0' [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/vga.vhd:31]
+	Parameter Hsync bound to: 208 - type: integer 
+	Parameter Hact bound to: 1920 - type: integer 
+	Parameter Hfp bound to: 128 - type: integer 
+	Parameter Hbp bound to: 336 - type: integer 
+	Parameter Vsync bound to: 3 - type: integer 
+	Parameter Vact bound to: 1200 - type: integer 
+	Parameter Vfp bound to: 1 - type: integer 
+	Parameter Vbp bound to: 38 - type: integer 
+INFO: [Synth 8-256] done synthesizing module 'vga__parameterized0' (1#1) [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/vga.vhd:31]
+INFO: [Synth 8-256] done synthesizing module 'top' (2#1) [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.vhd:46]
+WARNING: [Synth 8-3917] design top has port leds[7] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[6] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[5] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[4] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[3] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[2] driven by constant 0
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 808.523 ; gain = 186.219
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start RTL Optimization
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+Loading clock regions from /opt/Xilinx/Vivado/2013.4/data/parts/xilinx/zynq/zynq/xc7z020/ClockRegion.xml
+Loading clock buffers from /opt/Xilinx/Vivado/2013.4/data/parts/xilinx/zynq/zynq/xc7z020/ClockBuffers.xml
+Loading clock placement rules from /opt/Xilinx/Vivado/2013.4/data/parts/xilinx/zynq/ClockPlacerRules.xml
+Loading package pin functions from /opt/Xilinx/Vivado/2013.4/data/parts/xilinx/zynq/PinFunctions.xml...
+Loading package from /opt/Xilinx/Vivado/2013.4/data/parts/xilinx/zynq/zynq/xc7z020/clg484/Package.xml
+Loading io standards from /opt/Xilinx/Vivado/2013.4/data/./parts/xilinx/zynq/IOStandards.xml
+
+Processing XDC Constraints
+Parsing XDC File [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/.Xil/Vivado-10489-macbook/dcp/clk_base_in_context.xdc] for cell 'clk_base1'
+Finished Parsing XDC File [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/.Xil/Vivado-10489-macbook/dcp/clk_base_in_context.xdc] for cell 'clk_base1'
+Parsing XDC File [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.xdc]
+Finished Parsing XDC File [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/top.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/.Xil/top_propImpl.xdc].
+Resolution: To avoid this message, exclude constraints listed in [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/.Xil/top_propImpl.xdc] from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Parsing XDC File [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/dont_buffer.xdc]
+Finished Parsing XDC File [/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/dont_buffer.xdc]
+Completed Processing XDC Constraints
+
+INFO: [Memdata 28-144] Successfully populated the BRAM INIT strings from the following elf files: 
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+
+---------------------------------------------------------------------------------
+Start RTL Optimization
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property BUFFER_TYPE = NONE. (constraint file  /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/dont_buffer.xdc, line 4).
+Applied set_property BUFFER_TYPE = NONE. (constraint file  /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/dont_buffer.xdc, line 4).
+Applied set_property BUFFER_TYPE = NONE. (constraint file  /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/synth_1/dont_buffer.xdc, line 5).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1060.285 ; gain = 437.980
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Finished RTL Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1060.285 ; gain = 437.980
+---------------------------------------------------------------------------------
+
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg484-1
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1137.637 ; gain = 515.332
+---------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Registers : 
+	               12 Bit    Registers := 2     
+	                1 Bit    Registers := 3     
++---Muxes : 
+	   2 Input      1 Bit        Muxes := 1     
+
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module top 
+Detailed RTL Component Info : 
++---Registers : 
+	               12 Bit    Registers := 2     
+Module vga__parameterized0 
+Detailed RTL Component Info : 
++---Registers : 
+	                1 Bit    Registers := 3     
++---Muxes : 
+	   2 Input      1 Bit        Muxes := 1     
+
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start Cross Boundary Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-3332] Sequential element (\vga1/fpulse_s_reg ) is unused and will be removed from module top.
+WARNING: [Synth 8-3917] design top has port leds[7] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[6] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[5] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[4] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[3] driven by constant 0
+WARNING: [Synth 8-3917] design top has port leds[2] driven by constant 0
+---------------------------------------------------------------------------------
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1137.637 ; gain = 515.332
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[10] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[9] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[8] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[6] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[5] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[4] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[3] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[2] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[1] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\VGA_DATA_reg[0] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[10] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[9] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[8] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[6] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[5] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[4] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[3] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[2] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[1] ) is unused and will be removed from module top.
+WARNING: [Synth 8-3332] Sequential element (\data_reg[0] ) is unused and will be removed from module top.
+---------------------------------------------------------------------------------
+Finished Area Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1158.664 ; gain = 536.359
+---------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+INFO: Moved 2 constraints on hierarchical pins to their respective driving/loading pins
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1158.664 ; gain = 536.359
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1158.664 ; gain = 536.359
+---------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:20 ; elapsed = 00:00:20 . Memory (MB): peak = 1168.688 ; gain = 546.383
+---------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+Gated Clock Conversion mode: off
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 1168.688 ; gain = 546.383
+---------------------------------------------------------------------------------
+
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 1168.688 ; gain = 546.383
+---------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 1168.688 ; gain = 546.383
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++------+--------------+----------+
+|      |BlackBox name |Instances |
++------+--------------+----------+
+|1     |clk_base      |         1|
+|2     |clk_video     |         1|
++------+--------------+----------+
+
+Report Cell Usage: 
++------+---------------+------+
+|      |Cell           |Count |
++------+---------------+------+
+|1     |clk_base_bbox  |     1|
+|2     |clk_video_bbox |     1|
+|3     |CARRY4         |    13|
+|4     |LUT1           |    30|
+|5     |LUT2           |    14|
+|6     |LUT3           |     4|
+|7     |LUT4           |     3|
+|8     |LUT5           |    17|
+|9     |FDRE           |    30|
+|10    |OBUF           |    20|
++------+---------------+------+
+
+Report Instance Areas: 
++------+---------+--------------------+------+
+|      |Instance |Module              |Cells |
++------+---------+--------------------+------+
+|1     |top      |                    |   136|
+|2     |  vga1   |vga__parameterized0 |   107|
++------+---------+--------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 1168.688 ; gain = 546.383
+---------------------------------------------------------------------------------
+
+Synthesis finished with 0 errors, 0 critical warnings and 27 warnings.
+Synthesis Optimization Complete : Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 1168.688 ; gain = 546.383
+INFO: [Opt 31-140] Inserted 0 IBUFs to IO ports without IO buffers.
+INFO: [Opt 31-141] Inserted 0 OBUFs to IO ports without IO buffers.
+INFO: [Opt 31-138] Pushed 0 inverter(s).
+INFO: [Memdata 28-144] Successfully populated the BRAM INIT strings from the following elf files: 
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+19 Infos, 33 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:28 ; elapsed = 00:00:28 . Memory (MB): peak = 1520.164 ; gain = 799.457
+# write_checkpoint top.dcp
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+# report_utilization -file top_utilization_synth.rpt -pb top_utilization_synth.pb
+report_utilization: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.04 . Memory (MB): peak = 1520.168 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Sat Mar 15 17:46:53 2014...

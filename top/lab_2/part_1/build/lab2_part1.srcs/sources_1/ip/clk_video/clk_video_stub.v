@@ -1,7 +1,7 @@
 // Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
-// Date        : Sat Mar 15 17:10:07 2014
+// Date        : Sat Mar 15 17:45:54 2014
 // Host        : macbook running 64-bit Arch Linux
 // Command     : write_verilog -force -mode synth_stub
 //               /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video_stub.v

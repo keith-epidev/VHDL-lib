@@ -1,7 +1,7 @@
 -- Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
--- Date        : Sat Mar 15 17:10:07 2014
+-- Date        : Sat Mar 15 17:45:54 2014
 -- Host        : macbook running 64-bit Arch Linux
 -- Command     : write_vhdl -force -mode funcsim
 --               /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video_funcsim.vhdl
@@ -14,9 +14,9 @@ library IEEE; use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM; use UNISIM.VCOMPONENTS.ALL; 
 entity clk_videoclk_video_clk_wiz is
   port (
-    clk_100MHz : in STD_LOGIC;
+    locked : out STD_LOGIC;
     clk_193MHz : out STD_LOGIC;
-    locked : out STD_LOGIC
+    clk_100MHz : in STD_LOGIC
   );
 end clk_videoclk_video_clk_wiz;
 
@@ -45,13 +45,7 @@ architecture STRUCTURE of clk_videoclk_video_clk_wiz is
   signal NLW_mmcm_adv_inst_DO_UNCONNECTED : STD_LOGIC_VECTOR ( 15 downto 0 );
   attribute box_type : string;
   attribute box_type of clkf_buf : label is "PRIMITIVE";
-  attribute CAPACITANCE : string;
-  attribute CAPACITANCE of clkin1_ibufg : label is "DONT_CARE";
-  attribute IBUF_DELAY_VALUE : string;
-  attribute IBUF_DELAY_VALUE of clkin1_ibufg : label is "0";
-  attribute IFD_DELAY_VALUE : string;
-  attribute IFD_DELAY_VALUE of clkin1_ibufg : label is "AUTO";
-  attribute box_type of clkin1_ibufg : label is "PRIMITIVE";
+  attribute box_type of clkin1_bufg : label is "PRIMITIVE";
   attribute box_type of clkout1_buf : label is "PRIMITIVE";
   attribute box_type of mmcm_adv_inst : label is "PRIMITIVE";
 begin
@@ -68,10 +62,7 @@ clkf_buf: unisim.vcomponents.BUFG
       I => clkfbout_clk_video,
       O => clkfbout_buf_clk_video
     );
-clkin1_ibufg: unisim.vcomponents.IBUF
-    generic map(
-      IOSTANDARD => "DEFAULT"
-    )
+clkin1_bufg: unisim.vcomponents.BUFG
     port map (
       I => clk_100MHz,
       O => clk_100MHz_clk_video
@@ -118,7 +109,7 @@ mmcm_adv_inst: unisim.vcomponents.MMCME2_ADV
       CLKOUT6_DUTY_CYCLE => 0.500000,
       CLKOUT6_PHASE => 0.000000,
       CLKOUT6_USE_FINE_PS => false,
-      COMPENSATION => "ZHOLD",
+      COMPENSATION => "BUF_IN",
       DIVCLK_DIVIDE => 4,
       IS_CLKINSEL_INVERTED => '0',
       IS_PSEN_INVERTED => '0',
