@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<Runs Version="1" Minor="0">
+	<Run Id="clk_video_synth_1" LaunchDir="/home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.runs/clk_video_synth_1" FlowId="Vivado Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+</Runs>
+

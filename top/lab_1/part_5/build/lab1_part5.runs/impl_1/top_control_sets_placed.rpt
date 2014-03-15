@@ -1,0 +1,58 @@
+Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------
+| Tool Version : Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
+| Date         : Sat Mar 15 16:32:48 2014
+| Host         : macbook running 64-bit Arch Linux
+| Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
+| Design       : top
+| Device       : xc7z020
+-----------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Flip-Flop Distribution
+3. Detailed Control Set Information
+
+1. Summary
+----------
+
++-------------------------------------------------------------------+-------+
+|                               Status                              | Count |
++-------------------------------------------------------------------+-------+
+| Number of unique control sets                                     |     5 |
+| Minimum Number of register sites lost to control set restrictions |    14 |
++-------------------------------------------------------------------+-------+
+
+
+2. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |               2 |            2 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |              28 |            8 |
+| Yes          | No                    | No                     |              14 |            4 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |              14 |            4 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+3. Detailed Control Set Information
+-----------------------------------
+
++------------------------+---------------+------------------------+------------------+----------------+
+|      Clock Signal      | Enable Signal |    Set/Reset Signal    | Slice Load Count | Bel Load Count |
++------------------------+---------------+------------------------+------------------+----------------+
+|  fastclk/U0/clk_250MHz |               |                        |                2 |              2 |
+|  fastclk/U0/clk_250MHz |               | pwm1/clear             |                4 |             14 |
+|  fastclk/U0/clk_250MHz |               | sel                    |                4 |             14 |
+|  fastclk/U0/clk_250MHz | sel           |                        |                4 |             14 |
+|  fastclk/U0/clk_250MHz | sel           | n_1_timer_c_reg[0]_i_1 |                4 |             14 |
++------------------------+---------------+------------------------+------------------+----------------+
+
+
