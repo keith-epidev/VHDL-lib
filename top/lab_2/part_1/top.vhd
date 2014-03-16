@@ -24,6 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
+use work.VHDL_lib.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -49,7 +50,8 @@ architecture Behavioral of top is
     signal clk_250MHz: std_logic;
     signal hscnt: std_logic_vector(11 downto 0);
     signal vscnt: std_logic_vector(11 downto 0);
-    signal data: std_logic_vector(11 downto 0):= (others=>'0');              
+    signal data: std_logic_vector(11 downto 0):= (others=>'0');     
+             
     component clk_base is
       port (
         clk_raw : in STD_LOGIC;
@@ -67,28 +69,6 @@ architecture Behavioral of top is
       );
     end component;
     
-        component vga is
-    	generic(
-    		Hsync:integer := 208;
-    		Hact:integer := 1920;
-    		Hfp:integer := 128;
-    		Hbp:integer := 336;
-    		
-    
-    		Vsync:integer := 3;
-    		Vact:integer := 1200;
-    		Vfp:integer := 1;
-    		Vbp:integer := 38
-    	);
-    	port(
-    		 clk: 	  in std_logic;
-    		 hscnt:   out std_logic_vector(11 downto 0);
-    		 vscnt:	  out std_logic_vector(11 downto 0);
-    		 hspulse: out std_logic;
-    		 vspulse: out std_logic;
-    		 fpulse: out std_logic
-    	);
-    end component;
 
 
 begin

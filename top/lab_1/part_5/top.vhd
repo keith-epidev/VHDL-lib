@@ -24,6 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
+use work.VHDL_lib.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -55,19 +56,6 @@ component clk_base is
   );
 end component;
 
-
-
-component pwm is
-    Generic (
-        width:integer := 25;
-        size:integer := 50000000
-        );
-    Port (
-        clk: in std_logic;
-        duty: in std_logic_vector(width-1 downto 0);
-        output: out std_logic
-     );
-end component;
 
 begin
 
