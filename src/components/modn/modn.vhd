@@ -13,12 +13,12 @@ entity modn is
 		enable: in std_logic;
 		reset: in std_logic;
 		overflow: out std_logic;
-		output : out std_logic_vector(f_log2(size)-1 downto 0); 
+		output : out std_logic_vector(log2(size)-1 downto 0)
 	);
 end modn;
 
 architecture arch of modn is
-	signal count: std_logic_vector(f_log2(size)-1 downto 0);
+	signal count: std_logic_vector(log2(size)-1 downto 0);
 begin
 	output <= count;
 

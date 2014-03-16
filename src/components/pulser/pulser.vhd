@@ -16,7 +16,7 @@ entity pulser is
 end pulser;
 
 architecture Behavioral of pulser is
-	signal timer: std_logic_vector(f_log2(delay)-1 downto 0);
+	signal timer: std_logic_vector(log2(delay)-1 downto 0);
 	signal pulse: std_logic;
 begin
 

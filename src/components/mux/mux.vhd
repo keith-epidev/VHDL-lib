@@ -9,7 +9,7 @@ entity mux is
 		size:integer := 4
 	);
 	port (
-		s : in std_logic_vector(f_log2(size)-1 downto 0); 
+		s : in std_logic_vector(log2(size)-1 downto 0); 
 		input : in std_logic_vector(size-1 downto 0); 
 		output : out std_logic
 	);
