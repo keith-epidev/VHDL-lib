@@ -1,10 +1,10 @@
 // Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
-// Date        : Sat Mar 15 17:45:54 2014
+// Date        : Mon Mar 17 09:47:36 2014
 // Host        : macbook running 64-bit Arch Linux
 // Command     : write_verilog -force -mode funcsim
-//               /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video_funcsim.v
+//               /home/keith/Documents/VHDL-lib/top/lab_2/part_2/ip/clk_video/clk_video_funcsim.v
 // Design      : clk_video
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -33,12 +33,12 @@ clk_videoclk_video_clk_wiz U0
 endmodule
 
 module clk_videoclk_video_clk_wiz
-   (locked,
+   (clk_100MHz,
     clk_193MHz,
-    clk_100MHz);
-  output locked;
-  output clk_193MHz;
+    locked);
   input clk_100MHz;
+  output clk_193MHz;
+  output locked;
 
   wire \<const0> ;
   wire \<const1> ;
@@ -85,12 +85,12 @@ VCC VCC
 (* box_type = "PRIMITIVE" *) 
    MMCME2_ADV #(
     .BANDWIDTH("OPTIMIZED"),
-    .CLKFBOUT_MULT_F(30.875000),
+    .CLKFBOUT_MULT_F(10.125000),
     .CLKFBOUT_PHASE(0.000000),
     .CLKFBOUT_USE_FINE_PS("FALSE"),
     .CLKIN1_PERIOD(10.000000),
     .CLKIN2_PERIOD(0.000000),
-    .CLKOUT0_DIVIDE_F(4.000000),
+    .CLKOUT0_DIVIDE_F(9.375000),
     .CLKOUT0_DUTY_CYCLE(0.500000),
     .CLKOUT0_PHASE(0.000000),
     .CLKOUT0_USE_FINE_PS("FALSE"),
@@ -120,7 +120,7 @@ VCC VCC
     .CLKOUT6_PHASE(0.000000),
     .CLKOUT6_USE_FINE_PS("FALSE"),
     .COMPENSATION("BUF_IN"),
-    .DIVCLK_DIVIDE(4),
+    .DIVCLK_DIVIDE(1),
     .IS_CLKINSEL_INVERTED(1'b0),
     .IS_PSEN_INVERTED(1'b0),
     .IS_PSINCDEC_INVERTED(1'b0),

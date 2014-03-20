@@ -1,10 +1,10 @@
 -- Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
--- Date        : Sat Mar 15 17:45:54 2014
+-- Date        : Mon Mar 17 09:47:36 2014
 -- Host        : macbook running 64-bit Arch Linux
 -- Command     : write_vhdl -force -mode funcsim
---               /home/keith/Documents/VHDL-lib/top/lab_2/part_1/build/lab2_part1.srcs/sources_1/ip/clk_video/clk_video_funcsim.vhdl
+--               /home/keith/Documents/VHDL-lib/top/lab_2/part_2/ip/clk_video/clk_video_funcsim.vhdl
 -- Design      : clk_video
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -14,9 +14,9 @@ library IEEE; use IEEE.STD_LOGIC_1164.ALL;
 library UNISIM; use UNISIM.VCOMPONENTS.ALL; 
 entity clk_videoclk_video_clk_wiz is
   port (
-    locked : out STD_LOGIC;
+    clk_100MHz : in STD_LOGIC;
     clk_193MHz : out STD_LOGIC;
-    clk_100MHz : in STD_LOGIC
+    locked : out STD_LOGIC
   );
 end clk_videoclk_video_clk_wiz;
 
@@ -75,12 +75,12 @@ clkout1_buf: unisim.vcomponents.BUFG
 mmcm_adv_inst: unisim.vcomponents.MMCME2_ADV
     generic map(
       BANDWIDTH => "OPTIMIZED",
-      CLKFBOUT_MULT_F => 30.875000,
+      CLKFBOUT_MULT_F => 10.125000,
       CLKFBOUT_PHASE => 0.000000,
       CLKFBOUT_USE_FINE_PS => false,
       CLKIN1_PERIOD => 10.000000,
       CLKIN2_PERIOD => 0.000000,
-      CLKOUT0_DIVIDE_F => 4.000000,
+      CLKOUT0_DIVIDE_F => 9.375000,
       CLKOUT0_DUTY_CYCLE => 0.500000,
       CLKOUT0_PHASE => 0.000000,
       CLKOUT0_USE_FINE_PS => false,
@@ -110,7 +110,7 @@ mmcm_adv_inst: unisim.vcomponents.MMCME2_ADV
       CLKOUT6_PHASE => 0.000000,
       CLKOUT6_USE_FINE_PS => false,
       COMPENSATION => "BUF_IN",
-      DIVCLK_DIVIDE => 4,
+      DIVCLK_DIVIDE => 1,
       IS_CLKINSEL_INVERTED => '0',
       IS_PSEN_INVERTED => '0',
       IS_PSINCDEC_INVERTED => '0',

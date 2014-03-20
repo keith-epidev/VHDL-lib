@@ -75,7 +75,17 @@ begin
 
 clk_base1: clk_base port map(clk_raw, clk_250MHz, clk_100MHz, leds(0));
 clk_video1: clk_video port map(clk_100MHz, clk_193MHz, leds(1));
-vga1: vga port map( clk_193MHz, hscnt,vscnt,VGA_HSYNC, VGA_VSYNC,open);
+vga1: vga generic map(
+        Hsync=> 112,
+		Hact=> 1280,
+		Hfp=>48,
+		Hbp=>248,
+
+		Vsync=>3,
+		Vact=> 1024,
+		Vfp=> 1,
+		Vbp=> 38
+) port map( clk_193MHz, hscnt,vscnt,VGA_HSYNC, VGA_VSYNC,open);
 
 leds(7 downto 2) <= (others=>'0');
 
@@ -84,20 +94,22 @@ leds(7 downto 2) <= (others=>'0');
 process(clk_193MHz) begin
     if(clk_193MHz'event and clk_193MHz='1')then
     
-        if(hscnt < 1920 and vscnt < 1200)then
+        if( hscnt < 1280 and vscnt < 1024)then
                 VGA_DATA <= data;
         else
               VGA_DATA <= (others=>'0');
             
         end if;
         
-        
-        if((hscnt = 0) and (hscnt = 1920-1)) then
+   
+    if (vscnt = 512)then
+      data <= X"07F";
+        elsif((hscnt = 0) or (hscnt = 128) or (hscnt = 256) or (hscnt = 384) or (hscnt = 512) or (hscnt = 640) or (hscnt = 768) or (hscnt = 896) or (hscnt = 1024) or (hscnt = 1152) or (hscnt = 1280-1)) then
             data <= X"0FF";
-          elsif((vscnt = 0) and (vscnt = 1200-1)) then
+          elsif((vscnt = 0) or (vscnt = 128) or (vscnt = 256) or (vscnt = 384) or (vscnt = 640) or (vscnt = 768) or (vscnt = 896) or  (vscnt = 1024-1)) then
                 data <= X"0FF";
          else
-             data <= X"FFF";
+             data <= X"000";
          end if;
     
      
