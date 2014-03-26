@@ -2,9 +2,10 @@ library IEEE;
         use IEEE.std_logic_1164.all;
         use IEEE.std_logic_unsigned.all;
         use IEEE.math_real.all;
-        use work.math.all;
 
 package VHDL_lib is
+function log2 (x : positive) return natural;
+
 component pwm is
     Generic (
         width:integer := 25;
@@ -49,6 +50,13 @@ component xor_gate is
 	);
 end component;
 
+component ascii_table is
+	port(
+		 input: in std_logic_vector(7 downto 0);
+		 output: out std_logic_vector(40-1 downto 0)
+	);
+end component;
+
 component and_gate is
 	generic ( 
 		width:integer := 2
@@ -75,6 +83,17 @@ component FULL_ADDER is
 	port (
 		A,B,CIN : in std_logic; 
 		SUM,CARRY : out std_logic
+	);
+end component;
+
+component debounce is
+	generic(
+		delay:integer := 500000
+	);
+	port(
+		 clk: in std_logic;
+		 input: in std_logic;
+		 output: out std_logic
 	);
 end component;
 
@@ -114,6 +133,17 @@ component vga is
 	);
 end component;
 
+component bitshift_div is
+	generic(
+		size:integer := 10
+	);
+	port(
+		scale: in std_logic_vector(1 downto 0);
+		input: in std_logic_vector(size-1 downto 0);
+		output: out std_logic_vector(size-1 downto 0)
+	);
+end component;
+
 component HALF_ADDER is
 	port (
 		A,B : in std_logic; 
@@ -143,6 +173,21 @@ component modn is
 		output : out std_logic_vector(log2(size)-1 downto 0)
 	);
 end component;
+
+
+end;
+
+package body VHDL_lib is
+
+function log2 (x : positive) return natural is
+	variable i : natural;
+	begin
+	i := 0;  
+	while (2**i < x) and i < 31 loop
+	i := i + 1;
+	end loop;
+	return i;
+end function;
 
 
 end;

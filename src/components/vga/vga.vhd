@@ -70,7 +70,7 @@ begin
 
 
     -- hsync signal
-	if((hscnt_s > Hact + Hfp) and (hscnt_s < Hact+Hfp+Hsync))then
+	if((hscnt_s > Hact + Hfp ) and (hscnt_s < Hact+Hfp+Hsync))then
 		hspulse_s <= '1';
 	else
 		hspulse_s <= '0';
