@@ -70,7 +70,7 @@ if(clk_100MHz'event and clk_100MHz='1')then
 
 --timer <= timer + 1;
 
-	if(x >= vga_width  and ((signed(input) >= signed(value) and signed(last) <= signed(value)) or (signed(input) = signed(value)) ) )then
+	if(x >= vga_width  and ((signed(input) >= signed(value) and signed(last) <= signed(value))  ) )then
 		x <= (others=>'0');
 		active <='0';
 	end if;

@@ -1,7 +1,7 @@
 // Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
-// Date        : Wed Mar 26 13:09:29 2014
+// Date        : Thu Mar 27 13:22:53 2014
 // Host        : macbook running 64-bit Arch Linux
 // Command     : write_verilog -force -mode synth_stub /home/keith/Documents/VHDL-lib/top/lab_3/part_2/ip/dds/dds_stub.v
 // Design      : dds

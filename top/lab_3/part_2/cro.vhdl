@@ -68,7 +68,7 @@ architecture Behavioral of cro is
     signal ch2_x_o: STD_LOGIC_VECTOR(xwidth-1 DOWNTO 0);
     signal ch2_y_o: STD_LOGIC_VECTOR(ywidth-1 DOWNTO 0);
 
-    signal vline_buf: STD_LOGIC_VECTOR(log2(vga_height)-1 downto 0);
+ --   signal vline_buf: STD_LOGIC_VECTOR(log2(vga_height)-1 downto 0);
     signal vline_enb_buf: std_logic;
 
 
@@ -216,7 +216,7 @@ process(clk_vid) begin
     
 	ch1_signed <= signed(ch1_y_o);
     ch2_signed <= signed(ch2_y_o);
-    vline_signed <= signed(vline_buf);
+    vline_signed <= signed(vline);
 	--cosine_signed <= signed(cosine);   
 	end if;
 end process;

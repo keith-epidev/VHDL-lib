@@ -64,13 +64,13 @@ architecture Behavioral of top is
     signal ch2_y: std_logic_vector(ywidth-1  downto 0);    
     signal ch2_trigger: std_logic_vector(ywidth-1  downto 0);
     signal ch2_update: std_logic;    
+    signal mag: std_logic_vector(9 downto 0);
     
     signal vline: std_logic_vector(ywidth-1 downto 0);
     signal vline_clear: std_logic;
     signal vline_enb: std_logic;
     signal vline_enb_buf: std_logic;
-     signal vline_enb_buf1: std_logic;
-         signal vline_enb_buf2: std_logic;
+
             
     signal amplitude : std_logic_vector(1 downto 0);
     signal phase : std_logic_vector(15 downto 0);
@@ -129,13 +129,14 @@ architecture Behavioral of top is
      alias fft_out_im : std_logic_vector(28 downto 0) is m_axis_data_tdata(60 downto 32);
      alias fft_out_index:std_logic_vector(11 downto 0) is m_axis_data_tuser(11 downto 0); 
      
-     signal fft_out_index_buf:std_logic_vector(11*6 downto 0);
+     signal fft_out_index_buf:std_logic_vector(11*8 downto 0);
      signal ch1_y_fft_in: std_logic_vector(15 downto 0);
      
     signal sqr_re_i, sqr_im_i : std_logic_vector(28 downto 0);         
     signal sqr_re_o, sqr_im_o : std_logic_vector(57 downto 0); 
     
     signal sqr_summed: std_logic_vector(57 downto 0); 
+    signal top_6: std_logic_vector(5 downto 0);
               
     signal mem_out_data,mem_out_data_buf : std_logic_vector(11 downto 0);
     signal mem_out_address: std_logic_vector(11 downto 0);      
@@ -229,14 +230,14 @@ COMPONENT dds
 END COMPONENT;
     
     
-    type modstate is (set_amplitude,set_phase,set_ch1_trigger,set_ch2_trigger,set_bits); 
+    type modstate is (set_amplitude,set_phase,set_ch1_trigger,set_bits); 
     signal state : modstate;
     
 begin
 
 
 clk_base1: clk_base port map(clk_raw, clk_250MHz, clk_100MHz, open);
-cro1: cro generic map(vga_width,vga_height) port map(clk_100MHz,ch1_x,ch1_y,ch1_update,ch2_x,ch2_y,ch2_update,vline,vline_enb_buf1,VGA_DATA,VGA_HSYNC,VGA_VSYNC);
+cro1: cro generic map(vga_width,vga_height) port map(clk_100MHz,ch1_x,ch1_y,ch1_update,ch2_x,ch2_y,ch2_update,vline,vline_enb_buf,VGA_DATA,VGA_HSYNC,VGA_VSYNC);
 trigger1: trigger generic map(vga_width,vga_height) port map(clk_100MHz,ch1_y,ch1_trigger,ch1_update,ch1_x,(others=>'0'));
 --trigger2: trigger generic map(vga_width,vga_height) port map(clk_100MHz,ch2_y,ch2_trigger,ch2_update,ch2_x,(others=>'0'));
 
@@ -305,6 +306,76 @@ fft1: fft
     event_data_out_channel_halt => event_data_out_channel_halt
   );
 
+with to_integer(unsigned(sqr_summed(29 downto 0))) select
+	mag <=
+		std_logic_vector(to_unsigned(0*20,10)) when 0,		
+		std_logic_vector(to_unsigned((0+1)*20,10)) when 2**0 to 2**(0+1)-1,
+		std_logic_vector(to_unsigned((1+1)*20,10)) when 2**1 to 2**(1+1)-1,
+		std_logic_vector(to_unsigned((2+1)*20,10)) when 2**2 to 2**(2+1)-1,
+		std_logic_vector(to_unsigned((3+1)*20,10)) when 2**3 to 2**(3+1)-1,
+		std_logic_vector(to_unsigned((4+1)*20,10)) when 2**4 to 2**(4+1)-1,
+		std_logic_vector(to_unsigned((5+1)*20,10)) when 2**5 to 2**(5+1)-1,
+		std_logic_vector(to_unsigned((6+1)*20,10)) when 2**6 to 2**(6+1)-1,
+		std_logic_vector(to_unsigned((7+1)*20,10)) when 2**7 to 2**(7+1)-1,
+		std_logic_vector(to_unsigned((8+1)*20,10)) when 2**8 to 2**(8+1)-1,
+		std_logic_vector(to_unsigned((9+1)*20,10)) when 2**9 to 2**(9+1)-1,
+		std_logic_vector(to_unsigned((10+1)*20,10)) when 2**10 to 2**(10+1)-1,
+		std_logic_vector(to_unsigned((11+1)*20,10)) when 2**11 to 2**(11+1)-1,
+		std_logic_vector(to_unsigned((12+1)*20,10)) when 2**12 to 2**(12+1)-1,
+		std_logic_vector(to_unsigned((13+1)*20,10)) when 2**13 to 2**(13+1)-1,
+		std_logic_vector(to_unsigned((14+1)*20,10)) when 2**14 to 2**(14+1)-1,
+		std_logic_vector(to_unsigned((15+1)*20,10)) when 2**15 to 2**(15+1)-1,
+		std_logic_vector(to_unsigned((16+1)*20,10)) when 2**16 to 2**(16+1)-1,
+		std_logic_vector(to_unsigned((17+1)*20,10)) when 2**17 to 2**(17+1)-1,
+		std_logic_vector(to_unsigned((18+1)*20,10)) when 2**18 to 2**(18+1)-1,
+		std_logic_vector(to_unsigned((19+1)*20,10)) when 2**19 to 2**(19+1)-1,
+		std_logic_vector(to_unsigned((20+1)*20,10)) when 2**20 to 2**(20+1)-1,
+		std_logic_vector(to_unsigned((21+1)*20,10)) when 2**21 to 2**(21+1)-1,
+		std_logic_vector(to_unsigned((22+1)*20,10)) when 2**22 to 2**(22+1)-1,
+		std_logic_vector(to_unsigned((23+1)*20,10)) when 2**23 to 2**(23+1)-1,
+		std_logic_vector(to_unsigned((24+1)*20,10)) when 2**24 to 2**(24+1)-1,
+		std_logic_vector(to_unsigned((25+1)*20,10)) when 2**25 to 2**(25+1)-1,
+		std_logic_vector(to_unsigned((26+1)*20,10)) when 2**26 to 2**(26+1)-1,
+		std_logic_vector(to_unsigned((27+1)*20,10)) when 2**27 to 2**(27+1)-1,
+		std_logic_vector(to_unsigned((28+1)*20,10)) when 2**28 to 2**(28+1)-1,
+		std_logic_vector(to_unsigned((29+1)*20,10)) when 2**29 to 2**(29+1)-1;
+
+
+
+with to_integer(unsigned(sqr_summed(29 downto 0))) select
+	top_6 <=
+		std_logic_vector(to_unsigned(0,6)) when 0 to 1,
+        sqr_summed(1-1 downto 6-6)&"00000" when 2**1 to 2**(1+1)-1,
+        sqr_summed(2-1 downto 6-6)&"0000" when 2**2 to 2**(2+1)-1,
+        sqr_summed(3-1 downto 6-6)&"000" when 2**3 to 2**(3+1)-1,
+        sqr_summed(4-1 downto 6-6)&"00" when 2**4 to 2**(4+1)-1,	
+        sqr_summed(5-1 downto 6-6)&"0" when 2**5 to 2**(5+1)-1,		
+		sqr_summed(6-1 downto 6-6) when 2**6 to 2**(6+1)-1,
+		sqr_summed(7-1 downto 7-6) when 2**7 to 2**(7+1)-1,
+		sqr_summed(8-1 downto 8-6) when 2**8 to 2**(8+1)-1,
+		sqr_summed(9-1 downto 9-6) when 2**9 to 2**(9+1)-1,
+		sqr_summed(10-1 downto 10-6) when 2**10 to 2**(10+1)-1,
+		sqr_summed(11-1 downto 11-6) when 2**11 to 2**(11+1)-1,
+		sqr_summed(12-1 downto 12-6) when 2**12 to 2**(12+1)-1,
+		sqr_summed(13-1 downto 13-6) when 2**13 to 2**(13+1)-1,
+		sqr_summed(14-1 downto 14-6) when 2**14 to 2**(14+1)-1,
+		sqr_summed(15-1 downto 15-6) when 2**15 to 2**(15+1)-1,
+		sqr_summed(16-1 downto 16-6) when 2**16 to 2**(16+1)-1,
+		sqr_summed(17-1 downto 17-6) when 2**17 to 2**(17+1)-1,
+		sqr_summed(18-1 downto 18-6) when 2**18 to 2**(18+1)-1,
+		sqr_summed(19-1 downto 19-6) when 2**19 to 2**(19+1)-1,
+		sqr_summed(20-1 downto 20-6) when 2**20 to 2**(20+1)-1,
+		sqr_summed(21-1 downto 21-6) when 2**21 to 2**(21+1)-1,
+		sqr_summed(22-1 downto 22-6) when 2**22 to 2**(22+1)-1,
+		sqr_summed(23-1 downto 23-6) when 2**23 to 2**(23+1)-1,
+		sqr_summed(24-1 downto 24-6) when 2**24 to 2**(24+1)-1,
+		sqr_summed(25-1 downto 25-6) when 2**25 to 2**(25+1)-1,
+		sqr_summed(26-1 downto 26-6) when 2**26 to 2**(26+1)-1,
+		sqr_summed(27-1 downto 27-6) when 2**27 to 2**(27+1)-1,
+		sqr_summed(28-1 downto 28-6) when 2**28 to 2**(28+1)-1,
+		sqr_summed(29-1 downto 29-6) when 2**29 to 2**(29+1)-1;
+
+
 
 
 process(clk_100MHz) begin
@@ -314,8 +385,8 @@ process(clk_100MHz) begin
 ch2_update <= '1';
 
 
-
-ch2_y <= sqr_summed(10+w downto w);
+ch2_y <= (mag+top_6 )-vga_height/2;
+--ch2_y <= sqr_summed((ywidth-1)+w downto w)+vga_height/2;
 --ch2_x <= fft_out_index(10 downto 0);
 
 ch1_y_fft_in <= std_logic_vector(resize(signed(scaled_ch1),16));
@@ -341,7 +412,7 @@ process(clk_100MHz) begin
     led(4) <= s_axis_data_tready;
     led(5) <= event_status_channel_halt;
     led(6) <= event_data_in_channel_halt;
-    led(7) <= event_data_out_channel_halt;
+    --led(7) <= event_data_out_channel_halt;
     
     
     
@@ -387,7 +458,7 @@ process(clk_100MHz) begin
          sqr_re_i <= fft_out_re;
          sqr_im_i <= fft_out_im;
          
-         fft_out_index_buf <= fft_out_index_buf(11*5-1 downto 0) & fft_out_index;
+         fft_out_index_buf <= fft_out_index_buf(11*7-1 downto 0) & (4096/2 - fft_out_index);
          
       -- if(m_axis_data_tlast = '1')then
             
@@ -407,15 +478,7 @@ process(clk_100MHz) begin
 end if;
 end process;
 
-process(clk_100MHz) begin
-    if(clk_100MHz'event and clk_100MHz='1')then
-    if(vline_enb_buf = '1')then
-        vline_enb_buf1 <= '1';
-        else
-        vline_enb_buf1 <= '0';  
-        end if;
-end if;
-end process;
+
 
 
 process(clk_100MHz) begin
@@ -444,18 +507,8 @@ process(clk_100MHz) begin
             ch1_trigger <= ch1_trigger + 1;
         elsif(dbtn(4) = '1')then
             ch1_trigger <= ch1_trigger - 1;
-        end if;   
-    when set_ch2_trigger =>
-        vline <= ch2_trigger;
-        vline_enb <= '1';
-        if(dbtn(0) = '1')then
-            ch2_trigger <= ch2_trigger + 1;
-        elsif(dbtn(4) = '1')then
-            ch2_trigger <= ch2_trigger - 1;
-        end if;  
-        
-                when set_bits =>
-
+        end if;    
+    when set_bits =>
             vline_enb <= '0';
             if(dbtn(0) = '1')then
                 w <= w + 1;
@@ -476,25 +529,21 @@ case state is
     when set_amplitude =>
         state <= set_phase;
     when set_phase =>
-        state <= set_phase;    
+        state <= set_ch1_trigger;    
     when set_ch1_trigger =>
-        state <= set_ch2_trigger;  
-    when set_ch2_trigger =>
-        state <= set_bits;  
-            when set_bits =>        
+        state <= set_bits;   
+     when set_bits =>        
        state <= set_amplitude; 
        end case; 
 elsif(dbtn(3) = '1')then
 case state is
     when set_amplitude =>
-        state <= set_ch2_trigger;
+        state <= set_bits;
     when set_phase =>
         state <= set_amplitude;  
     when set_ch1_trigger =>
-        state <= set_phase;  
-    when set_ch2_trigger =>
-        state <= set_bits;      
-        when set_bits =>
+        state <= set_phase;       
+    when set_bits =>
     state <= set_ch1_trigger;
 end case;   
 end if;
