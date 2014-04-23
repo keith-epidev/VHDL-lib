@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 use work.VHDL_lib.all;
 
 
@@ -19,15 +19,15 @@ end bitshift_div;
 architecture Behavioral of bitshift_div is
 	signal full: std_logic_vector(size-1 downto 0);
 	signal half: std_logic_vector(size-1-1 downto 0);
-	signal eighth: std_logic_vector(size-1-2 downto 0);
-	signal thirtytwoth: std_logic_vector(size-1-3 downto 0);
+	signal eighth: std_logic_vector(size-1-3 downto 0);
+	signal thirtytwoth: std_logic_vector(size-1-5 downto 0);
 
 begin
 
 full <= input;
 half <= input(size-1 downto 1);
-eighth <= input(size-1 downto 2);
-thirtytwoth <= input(size-1 downto 3);
+eighth <= input(size-1 downto 3);
+thirtytwoth <= input(size-1 downto 5);
 
 
 --case scale is 

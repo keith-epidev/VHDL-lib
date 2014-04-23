@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 use work.VHDL_lib.all;
 
 
@@ -13,11 +13,14 @@ entity ascii_table is
 end ascii_table;
 
 architecture Behavioral of ascii_table is
+signal swizzle:  std_logic_vector(40-1 downto 0);
 
 begin
+
+output <= swizzle(8*0+7 downto 8*0)&swizzle(8*1+7 downto 8*1)&swizzle(8*2+7 downto 8*2)&swizzle(8*3+7 downto 8*3)&swizzle(8*4+7 downto 8*4);
 	
 with input select
-output <= 
+swizzle <= 
 X"0000000000" when X"20", -- 
 X"00005f0000" when X"21", --!
 X"0007000700" when X"22", --"

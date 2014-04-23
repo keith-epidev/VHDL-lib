@@ -47,10 +47,10 @@ entity top is
 end top;
 
 architecture Behavioral of top is
-    constant vga_width : integer := 1920;
-    constant vga_height : integer := 1200;
+    constant vga_width : integer := 1280;
+    constant vga_height : integer := 1024;
     constant dds_mag : integer := 16;
-    constant delay_index : integer := 13;
+    constant delay_length : integer := 14;
     constant xwidth : integer := log2(vga_width);
     constant ywidth : integer := log2(vga_height);
     constant str_chars: integer := 50;
@@ -69,6 +69,8 @@ architecture Behavioral of top is
     signal ch2_trigger: std_logic_vector(ywidth-1  downto 0);
     signal ch2_update: std_logic;    
     signal mag: std_logic_vector(ywidth-1 downto 0);
+    signal mostsig: std_logic_vector(5 downto 0);
+    signal offset: std_logic_vector(ywidth-1 downto 0);
     signal trigger1_enable: std_logic;
  
     signal str : String(1 to str_chars);
@@ -78,6 +80,8 @@ architecture Behavioral of top is
     signal vline_clear: std_logic;
     signal vline_enb: std_logic;
     signal vline_enb_buf: std_logic;
+    
+    signal delay_index:  integer  range 0 to 13 ;
 
             
     signal amplitude : std_logic_vector(1 downto 0);
@@ -146,13 +150,15 @@ architecture Behavioral of top is
      alias fft_out_index:std_logic_vector(11 downto 0) is m_axis_data_tuser(11 downto 0); 
      
    
-     signal fft_out_index_buf:std_logic_vector(11*delay_index downto 0);
+     signal fft_out_index_buf:std_logic_vector(11*delay_length-1 downto 0);
      signal ch1_y_fft_in: std_logic_vector(15 downto 0);
      
     signal sqr_re_i, sqr_im_i : std_logic_vector(28 downto 0);         
     signal sqr_re_o, sqr_im_o : std_logic_vector(57 downto 0); 
     
     signal sqr_summed: std_logic_vector(57 downto 0); 
+    signal scale_sig: std_logic_vector(ywidth-1 downto 0);
+    
     signal top_6: std_logic_vector(5 downto 0);
               
     signal mem_out_data,mem_out_data_buf : std_logic_vector(11 downto 0);
@@ -216,6 +222,18 @@ architecture Behavioral of top is
       );
     END COMPONENT;
     
+        COMPONENT blk_mem_gen_0
+      PORT (
+        clka : IN STD_LOGIC;
+        wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
+        addra : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+        dina : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        clkb : IN STD_LOGIC;
+        addrb : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+        doutb : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+      );
+    END COMPONENT;
+    
     
     component trigger is
     	generic(
@@ -265,7 +283,7 @@ COMPONENT dds
 END COMPONENT;
     
     
-    type modstate is (set_amplitude,set_phase,set_ch1_trigger,set_bits,set_fe); 
+    type modstate is (set_amplitude,set_phase,set_ch1_trigger,set_bits,set_fe,set_delay); 
     signal state : modstate;
     
 begin
@@ -354,9 +372,15 @@ fft1: fft
   
   
   
-  
-  
-  
+
+
+
+process(clk_100MHz) begin
+    if(clk_100MHz'event and clk_100MHz='1')then
+
+
+    end if;
+end process;
   
   
 process(clk_100MHz) 
@@ -369,13 +393,91 @@ begin
             if (TMP = '0' and sqr_summed(I) = '1') then
                 nums_of_zeros <= I;      
                 TMP :='1';     
+                mag <= std_logic_vector( to_unsigned( (nums_of_zeros)*20, ywidth));
+                
+                case I IS
+                    when 6 to 57 => mostsig <= sqr_summed(I downto I-5);
+                    when 5 => mostsig <= "0"&sqr_summed(I downto I-4);
+                    when 4 => mostsig <= "00"&sqr_summed(I downto I-3);
+                    when 3 => mostsig <= "000"&sqr_summed(I downto I-2);
+                    when 2 => mostsig <= "0000"&sqr_summed(I downto I-1);
+                    when 1 => mostsig <= "00000"&sqr_summed(I downto I-0);
+                    when 0 => mostsig <= (others=>'0');
+               end case;
+                
             end if;
         end loop;
 
-    
-      mag <= std_logic_vector( to_unsigned( (nums_of_zeros)*20, ywidth));
 
-    
+case mostsig is
+		 when std_logic_vector(to_unsigned(0,6)) => scale_sig <= std_logic_vector(to_unsigned(0,ywidth)) ;
+		 when std_logic_vector(to_unsigned(1,6)) => scale_sig <= std_logic_vector(to_unsigned(0,ywidth)) ;
+		 when std_logic_vector(to_unsigned(2,6)) => scale_sig <= std_logic_vector(to_unsigned(1,ywidth)) ;
+		 when std_logic_vector(to_unsigned(3,6)) => scale_sig <= std_logic_vector(to_unsigned(1,ywidth)) ;
+		 when std_logic_vector(to_unsigned(4,6)) => scale_sig <= std_logic_vector(to_unsigned(1,ywidth)) ;
+		 when std_logic_vector(to_unsigned(5,6)) => scale_sig <= std_logic_vector(to_unsigned(2,ywidth)) ;
+		 when std_logic_vector(to_unsigned(6,6)) => scale_sig <= std_logic_vector(to_unsigned(2,ywidth)) ;
+		 when std_logic_vector(to_unsigned(7,6)) => scale_sig <= std_logic_vector(to_unsigned(2,ywidth)) ;
+		 when std_logic_vector(to_unsigned(8,6)) => scale_sig <= std_logic_vector(to_unsigned(3,ywidth)) ;
+		 when std_logic_vector(to_unsigned(9,6)) => scale_sig <= std_logic_vector(to_unsigned(3,ywidth)) ;
+		 when std_logic_vector(to_unsigned(10,6)) => scale_sig <= std_logic_vector(to_unsigned(3,ywidth)) ;
+		 when std_logic_vector(to_unsigned(11,6)) => scale_sig <= std_logic_vector(to_unsigned(3,ywidth)) ;
+		 when std_logic_vector(to_unsigned(12,6)) => scale_sig <= std_logic_vector(to_unsigned(4,ywidth)) ;
+		 when std_logic_vector(to_unsigned(13,6)) => scale_sig <= std_logic_vector(to_unsigned(4,ywidth)) ;
+		 when std_logic_vector(to_unsigned(14,6)) => scale_sig <= std_logic_vector(to_unsigned(4,ywidth)) ;
+		 when std_logic_vector(to_unsigned(15,6)) => scale_sig <= std_logic_vector(to_unsigned(5,ywidth)) ;
+		 when std_logic_vector(to_unsigned(16,6)) => scale_sig <= std_logic_vector(to_unsigned(5,ywidth)) ;
+		 when std_logic_vector(to_unsigned(17,6)) => scale_sig <= std_logic_vector(to_unsigned(5,ywidth)) ;
+		 when std_logic_vector(to_unsigned(18,6)) => scale_sig <= std_logic_vector(to_unsigned(6,ywidth)) ;
+		 when std_logic_vector(to_unsigned(19,6)) => scale_sig <= std_logic_vector(to_unsigned(6,ywidth)) ;
+		 when std_logic_vector(to_unsigned(20,6)) => scale_sig <= std_logic_vector(to_unsigned(6,ywidth)) ;
+		 when std_logic_vector(to_unsigned(21,6)) => scale_sig <= std_logic_vector(to_unsigned(7,ywidth)) ;
+		 when std_logic_vector(to_unsigned(22,6)) => scale_sig <= std_logic_vector(to_unsigned(7,ywidth)) ;
+		 when std_logic_vector(to_unsigned(23,6)) => scale_sig <= std_logic_vector(to_unsigned(7,ywidth)) ;
+		 when std_logic_vector(to_unsigned(24,6)) => scale_sig <= std_logic_vector(to_unsigned(8,ywidth)) ;
+		 when std_logic_vector(to_unsigned(25,6)) => scale_sig <= std_logic_vector(to_unsigned(8,ywidth)) ;
+		 when std_logic_vector(to_unsigned(26,6)) => scale_sig <= std_logic_vector(to_unsigned(8,ywidth)) ;
+		 when std_logic_vector(to_unsigned(27,6)) => scale_sig <= std_logic_vector(to_unsigned(9,ywidth)) ;
+		 when std_logic_vector(to_unsigned(28,6)) => scale_sig <= std_logic_vector(to_unsigned(9,ywidth)) ;
+		 when std_logic_vector(to_unsigned(29,6)) => scale_sig <= std_logic_vector(to_unsigned(9,ywidth)) ;
+		 when std_logic_vector(to_unsigned(30,6)) => scale_sig <= std_logic_vector(to_unsigned(10,ywidth)) ;
+		 when std_logic_vector(to_unsigned(31,6)) => scale_sig <= std_logic_vector(to_unsigned(10,ywidth)) ;
+		 when std_logic_vector(to_unsigned(32,6)) => scale_sig <= std_logic_vector(to_unsigned(10,ywidth)) ;
+		 when std_logic_vector(to_unsigned(33,6)) => scale_sig <= std_logic_vector(to_unsigned(10,ywidth)) ;
+		 when std_logic_vector(to_unsigned(34,6)) => scale_sig <= std_logic_vector(to_unsigned(11,ywidth)) ;
+		 when std_logic_vector(to_unsigned(35,6)) => scale_sig <= std_logic_vector(to_unsigned(11,ywidth)) ;
+		 when std_logic_vector(to_unsigned(36,6)) => scale_sig <= std_logic_vector(to_unsigned(11,ywidth)) ;
+		 when std_logic_vector(to_unsigned(37,6)) => scale_sig <= std_logic_vector(to_unsigned(12,ywidth)) ;
+		 when std_logic_vector(to_unsigned(38,6)) => scale_sig <= std_logic_vector(to_unsigned(12,ywidth)) ;
+		 when std_logic_vector(to_unsigned(39,6)) => scale_sig <= std_logic_vector(to_unsigned(12,ywidth)) ;
+		 when std_logic_vector(to_unsigned(40,6)) => scale_sig <= std_logic_vector(to_unsigned(13,ywidth)) ;
+		 when std_logic_vector(to_unsigned(41,6)) => scale_sig <= std_logic_vector(to_unsigned(13,ywidth)) ;
+		 when std_logic_vector(to_unsigned(42,6)) => scale_sig <= std_logic_vector(to_unsigned(13,ywidth)) ;
+		 when std_logic_vector(to_unsigned(43,6)) => scale_sig <= std_logic_vector(to_unsigned(14,ywidth)) ;
+		 when std_logic_vector(to_unsigned(44,6)) => scale_sig <= std_logic_vector(to_unsigned(14,ywidth)) ;
+		 when std_logic_vector(to_unsigned(45,6)) => scale_sig <= std_logic_vector(to_unsigned(14,ywidth)) ;
+		 when std_logic_vector(to_unsigned(46,6)) => scale_sig <= std_logic_vector(to_unsigned(15,ywidth)) ;
+		 when std_logic_vector(to_unsigned(47,6)) => scale_sig <= std_logic_vector(to_unsigned(15,ywidth)) ;
+		 when std_logic_vector(to_unsigned(48,6)) => scale_sig <= std_logic_vector(to_unsigned(15,ywidth)) ;
+		 when std_logic_vector(to_unsigned(49,6)) => scale_sig <= std_logic_vector(to_unsigned(16,ywidth)) ;
+		 when std_logic_vector(to_unsigned(50,6)) => scale_sig <= std_logic_vector(to_unsigned(16,ywidth)) ;
+		 when std_logic_vector(to_unsigned(51,6)) => scale_sig <= std_logic_vector(to_unsigned(16,ywidth)) ;
+		 when std_logic_vector(to_unsigned(52,6)) => scale_sig <= std_logic_vector(to_unsigned(17,ywidth)) ;
+		 when std_logic_vector(to_unsigned(53,6)) => scale_sig <= std_logic_vector(to_unsigned(17,ywidth)) ;
+		 when std_logic_vector(to_unsigned(54,6)) => scale_sig <= std_logic_vector(to_unsigned(17,ywidth)) ;
+		 when std_logic_vector(to_unsigned(55,6)) => scale_sig <= std_logic_vector(to_unsigned(17,ywidth)) ;
+		 when std_logic_vector(to_unsigned(56,6)) => scale_sig <= std_logic_vector(to_unsigned(18,ywidth)) ;
+		 when std_logic_vector(to_unsigned(57,6)) => scale_sig <= std_logic_vector(to_unsigned(18,ywidth)) ;
+		 when std_logic_vector(to_unsigned(58,6)) => scale_sig <= std_logic_vector(to_unsigned(18,ywidth)) ;
+		 when std_logic_vector(to_unsigned(59,6)) => scale_sig <= std_logic_vector(to_unsigned(19,ywidth)) ;
+		 when std_logic_vector(to_unsigned(60,6)) => scale_sig <= std_logic_vector(to_unsigned(19,ywidth)) ;
+		 when std_logic_vector(to_unsigned(61,6)) => scale_sig <= std_logic_vector(to_unsigned(19,ywidth)) ;
+		 when std_logic_vector(to_unsigned(62,6)) => scale_sig <= std_logic_vector(to_unsigned(20,ywidth)) ;
+		 when std_logic_vector(to_unsigned(63,6)) => scale_sig <= std_logic_vector(to_unsigned(20,ywidth)) ;
+end case;
+
+
+
    	end if;
 end process; 
 
@@ -407,7 +509,7 @@ ch2_update <= '1';
 
 
 --ch2_y <= vga_height/2;
-ch2_y <= mag;--(sqr_summed((ywidth-1)+w downto w));
+ch2_y <= mag + scale_sig;--(sqr_summed((ywidth-1)+w downto w));
 --ch2_x <= fft_out_index(10 downto 0);
 
 ch1_y_fft_in <= scaled_ch1;
@@ -482,15 +584,18 @@ end process;-- output fft
 process(clk_100MHz) begin
     if(clk_100MHz'event and clk_100MHz='1')then
     
-      ch2_x <= fft_out_index_buf(11*(delay_index) downto 11*(delay_index-1)+1);
+      ch2_x <= fft_out_index_buf(11*delay_length-1 downto 11*(delay_length-1)); -- pop
       --ch2_y <= sqr_summed(57 downto 47);
        
       if( m_axis_data_tvalid = '1' )then
          sqr_re_i <= fft_out_re;
          sqr_im_i <= fft_out_im;
          
-         fft_out_index_buf <= fft_out_index_buf(11*(delay_index-1)-1 downto 0) & (4096/2 - fft_out_index);
-         
+         if(fft_out_index < 4096/2)then
+         fft_out_index_buf <= fft_out_index_buf(11*(delay_length-1)-1 downto 0) & (fft_out_index(10 downto 0)); --push
+         else
+         fft_out_index_buf <= (others=>'1'); -- off screen
+         end if;
       -- if(m_axis_data_tlast = '1')then
             
       -- end if;
@@ -551,14 +656,25 @@ process(clk_100MHz) begin
                 w <= w - 1;
             end if;    
             
-         when set_fe =>
-            str <= "set filter index                                  ";
-            vline_enb <= '0';
-            if(dbtn(0) = '1')then
-                fe <= fe + 1;
-            elsif(dbtn(4) = '1')then
-                fe <= fe - 1;
-            end if;        
+     when set_fe =>
+        str <= "set filter index                                  ";
+        vline_enb <= '0';
+        if(dbtn(0) = '1')then
+            fe <= fe + 1;
+        elsif(dbtn(4) = '1')then
+            fe <= fe - 1;
+        end if;        
+    
+    
+    when set_delay =>
+       str <= "set delay index                                   ";
+       vline_enb <= '0';
+       if(dbtn(0) = '1')then
+           delay_index <= delay_index + 1;
+       elsif(dbtn(4) = '1')then
+           delay_index <= delay_index - 1;
+       end if;        
+    
     
     end case;
 end if;
@@ -577,23 +693,27 @@ case state is
         state <= set_ch1_trigger;    
     when set_ch1_trigger =>
         state <= set_bits;   
-     when set_bits =>        
+    when set_bits =>        
        state <= set_fe; 
-              when set_fe =>        
-          state <= set_amplitude; 
+    when set_fe =>        
+        state <= set_delay; 
+    when set_delay =>        
+        state <= set_amplitude; 
        end case; 
 elsif(dbtn(3) = '1')then
 case state is
     when set_amplitude =>
-        state <= set_fe;
+        state <= set_delay;
     when set_phase =>
         state <= set_amplitude;  
     when set_ch1_trigger =>
         state <= set_phase;       
     when set_bits =>
-    state <= set_ch1_trigger;
-        when set_fe =>
-    state <= set_bits;
+        state <= set_ch1_trigger;
+    when set_fe =>
+        state <= set_bits;
+    when set_delay =>
+        state <= set_fe;
 end case;   
 end if;
     

@@ -7,6 +7,7 @@ head="library IEEE;
         use IEEE.std_logic_1164.all;
         use IEEE.std_logic_unsigned.all;
         use IEEE.math_real.all;
+	use IEEE.NUMERIC_STD.ALL;		
 
 package VHDL_lib is
 "
