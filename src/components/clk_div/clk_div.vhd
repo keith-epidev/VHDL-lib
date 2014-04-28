@@ -10,7 +10,8 @@ entity clk_div is
 	);
 	port(
 		 input: in std_logic;
-		 output: out std_logic
+		 output: out std_logic;
+		 state: out std_logic_vector(log2(div)-1 downto 0)
 	);
 end clk_div;
 
@@ -20,6 +21,7 @@ architecture Behavioral of clk_div is
 begin
 
 output <= out_clk;
+state <= timer;
 
 clk_div_signal:process(input)
 begin		

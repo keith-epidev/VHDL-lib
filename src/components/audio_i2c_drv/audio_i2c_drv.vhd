@@ -4,16 +4,16 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.VHDL_lib.all;
 
-entity audio_spi_drv is
+entity audio_i2c_drv is
 	port(
 		clk: in std_logic;
 		data: out std_logic_vector(31 downto 0);
 		ready: in std_logic;
 		valid: out std_logic
 	);
-end audio_spi_drv;
+end audio_i2c_drv;
 
-architecture Behavioral of audio_spi_drv is
+architecture Behavioral of audio_i2c_drv is
     type states is (startup, idle, deliver, stall, complete);  --type of state machine.
     signal state : states;
     signal payload : std_logic_vector(31 downto 0);
@@ -24,27 +24,27 @@ architecture Behavioral of audio_spi_drv is
     type instruction_list is array (0 to 20) of std_logic_vector(31 downto 0);
     
     constant instructions : instruction_list := (
-    X"00400007",
-    X"00400007",
-    X"00400007",
-    X"00400007",
-    X"00401500",
-    X"00401601",
-    X"00401700",
-    X"00401800",
-    X"00401C21",
-    X"00401E41",
-    X"00402003",
-    X"00402109",
-    X"004025FE",
-    X"004026FE",
-    X"00402903",
-    X"00402A03",
-    X"00402B00",
-    X"00402C00",
-    X"0040F201",
-    X"0040F97F",
-    X"0040FA01");
+    X"71400007",
+    X"71400007",
+    X"71400007",
+    X"71400007",
+    X"71401500",
+    X"71401601", --   X"00401641",
+    X"71401700",
+    X"71401800",
+    X"71401C21",
+    X"71401E41",
+    X"71402003",
+    X"71402109",
+    X"714025FE",
+    X"714026FE",
+    X"71402903",
+    X"71402A03",
+    X"71402B00",
+    X"71402C00",
+    X"7140F201",
+    X"7140F97F",
+    X"7140FA01");
     
     
 begin

@@ -49,6 +49,15 @@ component pwm is
      );
 end component;
 
+component audio_i2c_drv is
+	port(
+		clk: in std_logic;
+		data: out std_logic_vector(31 downto 0);
+		ready: in std_logic;
+		valid: out std_logic
+	);
+end component;
+
 component spi is
 	port(
 		clk: in std_logic;
@@ -59,6 +68,18 @@ component spi is
 		clatch: out std_logic;
 		cclk: out std_logic;
 		cdata: out std_logic	
+	);
+end component;
+
+component i2c is
+	port(
+		clk: in std_logic;
+		data: in std_logic_vector(31 downto 0);
+		ready: out std_logic;
+		valid: in std_logic;
+		
+		sck: inout std_logic;
+		sda: inout std_logic	
 	);
 end component;
 
@@ -170,7 +191,8 @@ component clk_div is
 	);
 	port(
 		 input: in std_logic;
-		 output: out std_logic
+		 output: out std_logic;
+		 state: out std_logic_vector(log2(div)-1 downto 0)
 	);
 end component;
 
