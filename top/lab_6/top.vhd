@@ -43,13 +43,15 @@ entity top is
            ja : out std_logic_vector(10 downto 1);
            clatch: out std_logic;
            cdata: out std_logic;
-           cout: out std_logic;
-           cclk: out std_logic;
+       --    cout: out std_logic;
+         --  cclk: out std_logic;
            mclk: out std_logic;
            lrclk: out std_logic;
            bclk: out std_logic;
            dac_sdata: out std_logic;
-           adc_sdata: in std_logic
+           adc_sdata: in std_logic;
+           sda: inout std_logic;
+           sck: inout std_logic
            );
 end top;
 
@@ -80,15 +82,16 @@ architecture Behavioral of top is
     signal audio_input: std_logic_vector(audio_ch_bits-1 downto 0);
                     
     --spi
-    signal spi_data: std_logic_vector(31 downto 0);
-    signal spi_ready: std_logic;
-    signal spi_valid: std_logic;
+    signal i2c_data: std_logic_vector(31 downto 0);
+    signal i2c_ready: std_logic;
+    signal i2c_valid: std_logic;
     
     signal clatchb: std_logic;
     signal cclkb: std_logic;
     signal cdatab: std_logic;
-
-                 
+      
+    signal sdab: std_logic;
+    signal sckb: std_logic;           
                      
     component clk_base is
       port (
@@ -113,6 +116,9 @@ architecture Behavioral of top is
 
 begin
 
+
+clatch <= '1';
+cdata <= '1';
 
 clk_base1: clk_base port map(clk_raw, clk_250MHz, clk_100MHz, open);
 
@@ -148,25 +154,23 @@ audio1: audio
 	);
 
 
-
-spi1: spi
+i2c1: i2c
 	port map(
 		clk=>clk_100MHz,
-		data=>spi_data,
-		ready=>spi_ready,
-		valid=>spi_valid,
+		data=>i2c_data,
+		ready=>i2c_ready,
+		valid=>i2c_valid,
 		
-		clatch=>clatchb,
-		cclk=>cclkb,
-		cdata=>cdatab
+		sck=>sckb,
+		sda=>sdab
 	);
 
-audio_spi_drv1: audio_spi_drv
+audio_i2c_drv1: audio_i2c_drv
 	port map(
-		clk=>cclkb,
-		data=>spi_data,
-		ready=>spi_ready,
-		valid=>spi_valid
+		clk=>bclkb,
+		data=>i2c_data,
+		ready=>i2c_ready,
+		valid=>i2c_valid
 	);
 
 
@@ -185,20 +189,40 @@ begin
 	end if;
 end process;
 	
-ja(1) <= mclkb;
-ja(2) <= bclkb;
+ja(1) <= sck;--mclkb;
+ja(2) <= sda; --bclkb;
 ja(3) <= lrclkb;
 ja(4) <= dac_sdatab;
 
-ja(8) <= clatchb;
-ja(9) <= cclkb;
-ja(10) <= cdatab;
+ja(8) <= '0';
+ja(9) <= sdab;
+ja(10) <= sckb;
 
+process(clk_100MHz)
+begin		
+	if(clk_100MHz'event and clk_100MHz = '1')then
+
+        if(sdab = '0')then
+            sda <= '0';
+        else
+            sda <= 'X';
+        end if;
+        
+        if(sckb = '0')then
+            sck <= '0';
+        else
+            sck <= 'X';
+        end if;
+            
+    
+	end if;
+end process;
+	
 
 clatch <= clatchb;
 cdata <= cdatab;
 --cout <= coutb;
-cclk <= cclkb;
+--cclk <= cclkb;
 mclk <= mclkb;
 lrclk <=lrclkb;
 bclk <= bclkb;

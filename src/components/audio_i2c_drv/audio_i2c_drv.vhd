@@ -17,34 +17,34 @@ architecture Behavioral of audio_i2c_drv is
     type states is (startup, idle, deliver, stall, complete);  --type of state machine.
     signal state : states;
     signal payload : std_logic_vector(31 downto 0);
-    signal delay : std_logic_vector(log2(100) downto 0) := (others=>'0');
+    signal delay : std_logic_vector(log2(200) downto 0) := (others=>'0');
     signal index: integer := 0;
     signal cclkb: std_logic;
     
     type instruction_list is array (0 to 20) of std_logic_vector(31 downto 0);
     
     constant instructions : instruction_list := (
-    X"71400007",
-    X"71400007",
-    X"71400007",
-    X"71400007",
-    X"71401500",
-    X"71401601", --   X"00401641",
-    X"71401700",
-    X"71401800",
-    X"71401C21",
-    X"71401E41",
-    X"71402003",
-    X"71402109",
-    X"714025FE",
-    X"714026FE",
-    X"71402903",
-    X"71402A03",
-    X"71402B00",
-    X"71402C00",
-    X"7140F201",
-    X"7140F97F",
-    X"7140FA01");
+    X"76400007",
+    X"76400007",
+    X"76400007",
+    X"76400007",
+    X"76401500",
+    X"76401601", --   X"00401641",
+    X"76401700",
+    X"76401800",
+    X"76401C21",
+    X"76401E41",
+    X"76402003",
+    X"76402109",
+    X"764025FE",
+    X"764026FE",
+    X"76402903",
+    X"76402A03",
+    X"76402B00",
+    X"76402C00",
+    X"7640F201",
+    X"7640F97F",
+    X"7640FA01");
     
     
 begin
@@ -60,7 +60,7 @@ begin
     case state is
             when startup=>
             delay <= delay + 1;
-            if(delay > 100)then
+            if(delay > 200)then
                 state <= idle;
             end if;
         when idle=>

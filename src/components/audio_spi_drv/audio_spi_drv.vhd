@@ -64,6 +64,7 @@ begin
                 state <= idle;
             end if;
         when idle=>
+            delay <= (others=>'0');
             valid <= '0';   
             if(ready = '1')then
                 state <= deliver;
@@ -76,13 +77,16 @@ begin
             state <= stall;                   
          
         when stall=> 
-            if(ready = '0')then
-                if( index <= 20 )then
-                 state <= idle;                   
-                else
-                   state <= complete;                 
-                end if;
-            end if;  
+            delay <= delay + 1;
+                if(delay > 100)then
+                    if(ready = '0')then
+                        if( index <= 20 )then
+                         state <= idle;                   
+                        else
+                           state <= complete;                 
+                        end if;
+                    end if;  
+                end if;  
         when complete=>            
             valid <= '0'; 
             

@@ -43,15 +43,13 @@ entity top is
            ja : out std_logic_vector(10 downto 1);
            clatch: out std_logic;
            cdata: out std_logic;
-       --    cout: out std_logic;
-         --  cclk: out std_logic;
+           cout: out std_logic;
+           cclk: out std_logic;
            mclk: out std_logic;
            lrclk: out std_logic;
            bclk: out std_logic;
            dac_sdata: out std_logic;
-           adc_sdata: in std_logic;
-           sda: inout std_logic;
-           sck: inout std_logic
+           adc_sdata: in std_logic
            );
 end top;
 
@@ -82,9 +80,9 @@ architecture Behavioral of top is
     signal audio_input: std_logic_vector(audio_ch_bits-1 downto 0);
                     
     --spi
-    signal i2c_data: std_logic_vector(31 downto 0);
-    signal i2c_ready: std_logic;
-    signal i2c_valid: std_logic;
+    signal spi_data: std_logic_vector(31 downto 0);
+    signal spi_ready: std_logic;
+    signal spi_valid: std_logic;
     
     signal clatchb: std_logic;
     signal cclkb: std_logic;
@@ -150,23 +148,25 @@ audio1: audio
 	);
 
 
-i2c1: i2c
+
+spi1: spi
 	port map(
-		clk=>cclkb,
-		data=>i2c_data,
-		ready=>i2c_ready,
-		valid=>i2c_valid,
+		clk=>clk_100MHz,
+		data=>spi_data,
+		ready=>spi_ready,
+		valid=>spi_valid,
 		
-		sck=>sck,
-		sda=>sda
+		clatch=>clatchb,
+		cclk=>cclkb,
+		cdata=>cdatab
 	);
 
-audio_i2c_drv1: audio_i2c_drv
+audio_spi_drv1: audio_spi_drv
 	port map(
 		clk=>cclkb,
-		data=>i2c_data,
-		ready=>i2c_ready,
-		valid=>i2c_valid
+		data=>spi_data,
+		ready=>spi_ready,
+		valid=>spi_valid
 	);
 
 
@@ -174,7 +174,7 @@ process(clk_100MHz)
 begin		
 	if(clk_100MHz'event and clk_100MHz = '1')then
 	audio_input(23 downto 8) <= sine_raw;
-	audio_input(7 downto 0) <= (others=>'0');--std_logic_vector(resize(signed(sine_raw),audio_ch_bits));
+	audio_input(7 downto 0) <= (others=>'0');
 	
 		if(dbtn(0) = '1')then
              phase <= phase + 1;
@@ -190,15 +190,15 @@ ja(2) <= bclkb;
 ja(3) <= lrclkb;
 ja(4) <= dac_sdatab;
 
-ja(8) <= '0';
-ja(9) <= sda;
-ja(10) <= sck;
+ja(8) <= clatchb;
+ja(9) <= cclkb;
+ja(10) <= cdatab;
 
 
 clatch <= clatchb;
 cdata <= cdatab;
 --cout <= coutb;
---cclk <= cclkb;
+cclk <= cclkb;
 mclk <= mclkb;
 lrclk <=lrclkb;
 bclk <= bclkb;

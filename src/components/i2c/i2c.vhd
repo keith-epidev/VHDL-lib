@@ -19,66 +19,82 @@ end i2c;
 architecture Behavioral of i2c is
     type states is (idle,deliver);  --type of state machine.
     signal state : states;
-    signal payload : std_logic_vector(31+4 downto 0);
+    signal payload : std_logic_vector(31+7 downto 0);
     signal index: integer := 0;
 
-    signal sdab: std_logic;
-    signal cclkb: std_logic;
+    signal sdab: std_logic := '0';
+    signal sckb: std_logic := '0';   
+    
+    signal clkb: std_logic  := '0'; 
+    signal clk_offset: std_logic  := '0'; 
+    
 begin
 
 
-clk_div1: clk_div generic map(	div=>32 ) port map( input=> clk, output=> cclkb);
-
-
-clk_imp: process(cclkb) begin		
-	if(cclkb'event and cclkb = '0')then
-		sck <= '0';
-		
-	if(sdab = '1')then
-        sda <= 'X';
-	else
-		sda <= '0';
-	end if;
-		
-		
-	end if;
-
-	if(cclkb'event and cclkb = '1')then
-		sck <= 'X';
-	end if;
-end process;
+clk_div1: clk_div generic map(	div=>1000 ) port map( input=> clk, output=> clkb);
 
 
 
 
+sck <= sckb;
+sda <= sdab;	
 
 
 
 
-process(cclkb)
-begin		
-	if(cclkb'event and cclkb = '0')then
-       
-    case state is
-        when idle=>
-           ready <= '1';
-            if(valid = '1')then
-                state <= deliver;
-                payload <= data(31 downto 31-8) & '0' & data(31-8-1 downto 31-16) & '0' & data(31-16-1  downto 31-24) & '0' & data(31-24-1 downto 0) & '0';
-                index <= 0;
-            end if;
-        when deliver=>
-         
-            ready <= '0';
-            sdab <= payload(31+4 - index);          
-            index <= index + 1;
-            
-            if( index = 31+4 )then
-                state <= idle;
-            end if;
-    end case;   
+process(clkb) begin		
+	if(clkb'event and clkb = '1')then
+	
+        clk_offset <= not clk_offset;
         
-     
+        if(clk_offset = '1')then
+            sckb <= not sckb;
+        end if; 
+
+       
+       
+           
+   if(clk_offset = '0')then
+      
+        case state is
+            when idle=>
+                ready <= '1';
+                sdab <= '1';
+                
+                if(valid = '1')then
+                    state <= deliver;
+                    payload <= '0' & data(31 downto 24) & '1' & data(23 downto 16) & '1' & data(15  downto 8) & '1' & data(7 downto 0) & "001";
+                    index <= 0;               
+                end if;
+            when deliver=>
+            
+                ready <= '0';
+                
+                if((index = 0 or index = 31+7) and sckb = '1')then
+                                
+                                sdab <= payload(31+7 - index);       
+                                
+                                if( index = 31+7 )then
+                                       state <= idle;
+                                       index <= 0;
+                                   else
+                                       index <= index + 1;
+                                end if; 
+                                
+                             
+                
+                elsif (  (index > 0 and index < 31+7) and sckb = '0' )then
+                            
+                                sdab <= payload(31+7 - index);          
+                                index <= index + 1;
+                
+                end if;
+            
+            
+           
+        end case;   
+        
+    end if;
         
 	end if;
 end process;
