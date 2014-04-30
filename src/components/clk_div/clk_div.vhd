@@ -11,12 +11,12 @@ entity clk_div is
 	port(
 		 input: in std_logic;
 		 output: out std_logic;
-		 state: out std_logic_vector(log2(div)-1 downto 0)
+		 state: out std_logic_vector(log2(div/2)-1 downto 0)
 	);
 end clk_div;
 
 architecture Behavioral of clk_div is
-	signal timer: std_logic_vector(log2(div)-1 downto 0) := (others=>'0');
+	signal timer: std_logic_vector(log2(div/2)-1 downto 0) := (others=>'0');
 	signal out_clk: std_logic := '0';
 begin
 
@@ -29,7 +29,7 @@ begin
 	if(input'event and input = '1')then
 	   timer <= timer + 1;
 	
-		if(timer = div-1)then
+		if(timer = div/2-1)then
 			timer <= (others=>'0');
 			out_clk <= not out_clk;
 		end if;
