@@ -1,15 +1,29 @@
 library IEEE;
         use IEEE.std_logic_1164.all;
-        use IEEE.std_logic_unsigned.all;
-        use IEEE.math_real.all;
+	use IEEE.std_logic_unsigned;
 	use IEEE.NUMERIC_STD.ALL;		
 
 package VHDL_lib is
+function next_power_2(len: positive) return positive;
+
 function char2int(arg : character) return natural;
+
+function test_factor(input:std_logic_vector; value: integer; factor: integer) return boolean;
 
 function char2std(arg : character) return std_logic_vector;
 
 function log2 (x : positive) return natural;
+
+component fft is
+	generic(
+		div:integer := 8
+	);
+	port(
+		clk: in std_logic;
+		input: in std_logic_vector(15 downto 0);
+		output: out std_logic_vector(15 downto 0)
+	);
+end component;
 
 component prn32 is 
 generic(
@@ -122,6 +136,28 @@ component ascii_table is
 	);
 end component;
 
+component cro is
+	generic(
+		vga_width:integer := 1920;
+		vga_height:integer := 1280
+	);
+
+	Port ( 	
+	    clk_250MHz : in std_logic;
+		clk_100MHz : 	in STD_LOGIC;
+		ch1_x:		in STD_LOGIC_VECTOR(log2(vga_width)-1 downto 0);
+		ch1_y:		in STD_LOGIC_VECTOR(log2(vga_height)-1 downto 0);
+		ch1_update:	in STD_LOGIC;
+		ch2_x:		in STD_LOGIC_VECTOR(log2(vga_width)-1 downto 0);
+		ch2_y:		in STD_LOGIC_VECTOR(log2(vga_height)-1 downto 0);
+		ch2_update:	in STD_LOGIC;
+
+		VGA_DATA : 	out STD_LOGIC_VECTOR (11 downto 0);
+		VGA_HSYNC : 	out STD_LOGIC;
+		VGA_VSYNC : 	out STD_LOGIC
+	);
+end component;
+
 component and_gate is
 	generic ( 
 		width:integer := 2
@@ -192,7 +228,18 @@ component clk_div is
 	port(
 		 input: in std_logic;
 		 output: out std_logic;
-		 state: out std_logic_vector(log2(div)-1 downto 0)
+		 state: out std_logic_vector(log2(div/2)-1 downto 0)
+	);
+end component;
+
+component adc is
+	port ( 	
+		clk_250MHz : 	in std_logic;
+		adc_clk_in_p: 	in std_logic;
+		adc_clk_in_n: 	in std_logic;
+		adc_data_in_p:	in std_logic_vector(7 downto 0);
+		adc_data_in_n:  in std_logic_vector(7 downto 0);
+		adc_data:	out std_logic_vector(15 downto 0)
 	);
 end component;
 
@@ -222,12 +269,13 @@ end component;
 
 component bitshift_div is
 	generic(
-		size:integer := 10
+		size_in:integer := 10;
+		size_out:integer := 10
 	);
 	port(
 		scale: in std_logic_vector(1 downto 0);
-		input: in std_logic_vector(size-1 downto 0);
-		output: out std_logic_vector(size-1 downto 0)
+		input: in std_logic_vector(size_in-1 downto 0);
+		output: out std_logic_vector(size_out-1 downto 0)
 	);
 end component;
 
@@ -263,10 +311,20 @@ component modn is
 	);
 	port (
 		clk : in std_logic;
-		enable: in std_logic;
-		reset: in std_logic;
-		overflow: out std_logic;
 		output : out std_logic_vector(log2(size)-1 downto 0)
+	);
+end component;
+
+component trigger is
+	generic(
+		vga_width:integer := 1280;
+		vga_height:integer := 1024
+		);
+	Port ( 	
+	    clk : 	in STD_LOGIC;
+		input:		in STD_LOGIC_VECTOR(log2(vga_height)-1 downto 0);
+		valid:      out STD_LOGIC;
+		output:		out STD_LOGIC_VECTOR(log2(vga_width)-1 downto 0)
 	);
 end component;
 
@@ -275,10 +333,35 @@ end;
 
 package body VHDL_lib is
 
+function next_power_2(len: positive) return positive is
+	variable n: positive;
+	begin
+		n := 1;
+
+	while n <= len loop
+		n := n * 2;
+	end loop;
+
+	return n;
+end;
+
 function char2int(arg : character) return natural is
 	begin
 	return character'pos(arg);
 end char2int;
+
+function test_factor(input:std_logic_vector; value: integer; factor: integer) return boolean is
+	variable result: boolean := false;
+	begin
+
+	for f in 0 to factor loop
+		if(to_integer(unsigned(input)) = (f*value)/factor )then
+			result := true;
+		end if;
+	end loop;
+
+	return result;
+end;
 
 function char2std(arg : character) return std_logic_vector is
 	begin

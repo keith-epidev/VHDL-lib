@@ -77,11 +77,30 @@ set_property IOSTANDARD LVCMOS33 [get_ports clk_raw]
 #set_property IOSTANDARD LVCMOS33 [get_ports {btn[3]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {btn[4]}]
 
+#JA
+set_property PACKAGE_PIN Y11 [get_ports {ja[1]}]
+set_property PACKAGE_PIN AA11 [get_ports {ja[2]}]
+set_property PACKAGE_PIN Y10 [get_ports {ja[3]}]
+set_property PACKAGE_PIN AA9 [get_ports {ja[4]}]
+set_property PACKAGE_PIN AB11 [get_ports {ja[7]}]
+set_property PACKAGE_PIN AB10 [get_ports {ja[8]}]
+set_property PACKAGE_PIN AB9 [get_ports {ja[9]}]
+set_property PACKAGE_PIN AA8 [get_ports {ja[10]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[4]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[7]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[8]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[9]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {ja[10]}]
+
+
 # FMC (ADC9467)
 set_property PACKAGE_PIN L18 [get_ports adc_clk_in_p]
 set_property PACKAGE_PIN L19 [get_ports adc_clk_in_n]
-set_property PACKAGE_PIN J21 [get_ports adc_data_or_p]
-set_property PACKAGE_PIN J22 [get_ports adc_data_or_n]
+#set_property PACKAGE_PIN J21 [get_ports adc_data_or_p]
+#set_property PACKAGE_PIN J22 [get_ports adc_data_or_n]
 set_property PACKAGE_PIN M19 [get_ports {adc_data_in_p[0]}]
 set_property PACKAGE_PIN M20 [get_ports {adc_data_in_n[0]}]
 set_property PACKAGE_PIN N19 [get_ports {adc_data_in_p[1]}]
@@ -98,10 +117,11 @@ set_property PACKAGE_PIN L21 [get_ports {adc_data_in_p[6]}]
 set_property PACKAGE_PIN L22 [get_ports {adc_data_in_n[6]}]
 set_property PACKAGE_PIN T16 [get_ports {adc_data_in_p[7]}]
 set_property PACKAGE_PIN T17 [get_ports {adc_data_in_n[7]}]
+
 set_property IOSTANDARD LVDS_25 [get_ports adc_clk_in_p]
 set_property IOSTANDARD LVDS_25 [get_ports adc_clk_in_n]
-set_property IOSTANDARD LVDS_25 [get_ports adc_data_or_p]
-set_property IOSTANDARD LVDS_25 [get_ports adc_data_or_n]
+#set_property IOSTANDARD LVDS_25 [get_ports adc_data_or_p]
+#set_property IOSTANDARD LVDS_25 [get_ports adc_data_or_n]
 set_property IOSTANDARD LVDS_25 [get_ports {adc_data_in_p[0]}]
 set_property IOSTANDARD LVDS_25 [get_ports {adc_data_in_n[0]}]
 set_property IOSTANDARD LVDS_25 [get_ports {adc_data_in_p[1]}]
@@ -118,10 +138,11 @@ set_property IOSTANDARD LVDS_25 [get_ports {adc_data_in_p[6]}]
 set_property IOSTANDARD LVDS_25 [get_ports {adc_data_in_n[6]}]
 set_property IOSTANDARD LVDS_25 [get_ports {adc_data_in_p[7]}]
 set_property IOSTANDARD LVDS_25 [get_ports {adc_data_in_n[7]}]
+
 set_property DIFF_TERM TRUE [get_ports adc_clk_in_p]
 set_property DIFF_TERM TRUE [get_ports adc_clk_in_n]
-set_property DIFF_TERM TRUE [get_ports adc_data_or_p]
-set_property DIFF_TERM TRUE [get_ports adc_data_or_n]
+#set_property DIFF_TERM TRUE [get_ports adc_data_or_p]
+#set_property DIFF_TERM TRUE [get_ports adc_data_or_n]
 set_property DIFF_TERM TRUE [get_ports {adc_data_in_p[0]}]
 set_property DIFF_TERM TRUE [get_ports {adc_data_in_n[0]}]
 set_property DIFF_TERM TRUE [get_ports {adc_data_in_p[1]}]
@@ -160,7 +181,7 @@ set input_ports         adc_data_in_p*;         # List of input ports
 create_clock -period $input_clock_period -name $input_clock -waveform {0.000 2.000} [get_ports adc_clk_in_p];
 set_input_jitter [get_clocks $input_clock] 0.050
 
-set sample_clock [get_clocks -of_objects [get_pins clk_adc_0/U0/clkout1_buf/O]];
+set sample_clock [get_clocks -of_objects [get_pins clk_adc_0/clk_out1]];
 
 # Input Delay Constraint
 set_input_delay -clock $input_clock -max $skew_are  [get_ports $input_ports];

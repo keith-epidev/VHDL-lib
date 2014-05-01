@@ -205,13 +205,13 @@ begin
         if(sdab = '0')then
             sda <= '0';
         else
-            sda <= 'X';
+            sda <= 'Z';
         end if;
         
         if(sckb = '0')then
             sck <= '0';
         else
-            sck <= 'X';
+            sck <= 'Z';
         end if;
             
     
