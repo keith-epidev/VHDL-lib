@@ -70,13 +70,7 @@ COMPONENT dds
       );
     END COMPONENT;
     
-    COMPONENT multi_QI
-      PORT (
-        CLK : IN STD_LOGIC;
-        A : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-        B : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-        P : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
-      );
+
     
 	--CONSTANTS--
     constant vga_width:integer := 1280;
@@ -155,22 +149,6 @@ adc1: adc port map (
 		adc_data	=> adc_data
 	);
 
-
-Q_term: multi_QI
-  PORT MAP (
-    CLK => clk_250MHz,
-    A => adc_data,
-    B => m_axis_data_tdata_sine,
-    P => Q
-  );
-
-I_term: multi_QI
-  PORT MAP (
-    CLK => clk_250MHz,
-    A => adc_data,
-    B => m_axis_data_tdata_cosine,
-    P => I
-  );
 
 
 fft1: fft
