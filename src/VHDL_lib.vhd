@@ -14,14 +14,20 @@ function char2std(arg : character) return std_logic_vector;
 
 function log2 (x : positive) return natural;
 
+function scale_log(input:std_logic_vector; max: integer) return std_logic_vector;
+
 component fft is
-	generic(
-		div:integer := 8
-	);
+    generic(
+        vga_width:integer := 1920;
+        vga_height:integer := 1200;
+        input_size:integer := 16
+    );
 	port(
 		clk: in std_logic;
-		input: in std_logic_vector(15 downto 0);
-		output: out std_logic_vector(15 downto 0)
+		input: in std_logic_vector(input_size-1 downto 0);
+		valid: out std_logic;
+        index: out std_logic_vector(log2(vga_width)-1 downto 0);
+		output: out std_logic_vector(log2(vga_height)-1 downto 0)
 	);
 end component;
 
@@ -108,6 +114,30 @@ component mux is
 	);
 end component;
 
+component delayer is
+	generic(
+		width:integer := 8;
+		stages:integer := 2
+	);
+	port(
+		 clk: in std_logic;
+		 input: in std_logic_vector(width-1 downto 0);
+		 output: out std_logic_vector(width-1 downto 0)
+	);
+end component;
+
+component truncate is
+	generic(
+		size_in:integer := 10;
+		size_out:integer := 10
+	);
+	port(
+	   clk: std_logic;
+		input: in std_logic_vector(size_in-1 downto 0);
+		output: out std_logic_vector(size_out-1 downto 0)
+	);
+end component;
+
 component pulser is
 	generic(
 		delay:integer := 500000
@@ -139,12 +169,12 @@ end component;
 component cro is
 	generic(
 		vga_width:integer := 1920;
-		vga_height:integer := 1280
+		vga_height:integer := 1200
 	);
 
 	Port ( 	
 	    clk_250MHz : in std_logic;
-		clk_100MHz : 	in STD_LOGIC;
+		clk_100MHz : in STD_LOGIC;
 		ch1_x:		in STD_LOGIC_VECTOR(log2(vga_width)-1 downto 0);
 		ch1_y:		in STD_LOGIC_VECTOR(log2(vga_height)-1 downto 0);
 		ch1_update:	in STD_LOGIC;
@@ -200,7 +230,7 @@ end component;
 
 component debounce is
 	generic(
-		delay:integer := 500000
+		delay:integer := 500000*2
 	);
 	port(
 		 clk: in std_logic;
@@ -262,20 +292,19 @@ component vga is
 		 hscnt:   out std_logic_vector(11 downto 0);
 		 vscnt:	  out std_logic_vector(11 downto 0);
 		 hspulse: out std_logic;
-		 vspulse: out std_logic;
-		 fpulse: out std_logic
+		 vspulse: out std_logic
 	);
 end component;
 
 component bitshift_div is
 	generic(
-		size_in:integer := 10;
-		size_out:integer := 10
+		scale_size:integer := 3;
+		size:integer := 10
 	);
 	port(
-		scale: in std_logic_vector(1 downto 0);
-		input: in std_logic_vector(size_in-1 downto 0);
-		output: out std_logic_vector(size_out-1 downto 0)
+		scale: in std_logic_vector(scale_size-1 downto 0);
+		input: in std_logic_vector(size-1 downto 0);
+		output: out std_logic_vector(size-1 downto 0)
 	);
 end component;
 
@@ -377,6 +406,23 @@ function log2 (x : positive) return natural is
 	end loop;
 	return i;
 end function;
+
+function scale_log(input:std_logic_vector; max: integer) return std_logic_vector is
+	constant level : integer := max/input'high;
+
+	variable result: integer := 0;
+	begin
+
+	for i in input'range  loop
+		if input(i) = '1' then
+			result := i;
+			exit;
+		end if;
+	end loop;
+
+
+	return std_logic_vector(to_signed(result*level,log2(max)));
+end;
 
 
 end;

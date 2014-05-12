@@ -21,6 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.VHDL_lib.all;
 
@@ -42,11 +43,21 @@ end adc;
 
 architecture Behavioral of adc is
 
-    signal adc_data_ddr,od,ev: std_logic_vector(7 downto 0);   
-    signal adc_clk_lock: std_logic;
-    signal adc_datab,adc_data_buf0, adc_data_buf1, adc_data_buf2, adc_data_buf3: std_logic_vector(15 downto 0);
+    signal adc_data_ddr,od,ev: std_logic_vector(7 downto 0) := (others=>'0');
+    signal adc_clk_lock: std_logic := '0';
+    signal adc_datab,adc_data_buf0, adc_data_buf1, adc_data_buf2, adc_data_buf3: std_logic_vector(15 downto 0) := (others=>'0');
+    
+    
+    signal dc_value: signed(15 downto 0) := (others=>'0');
+    signal accumulator: signed(28 downto 0) := (others=>'0');
+    signal n: std_logic_vector(12 downto 0) := (others=>'0');
+        
+
+
+    
 
 begin
+
 
 adc_data <= adc_datab;
 
@@ -88,9 +99,7 @@ begin
 		adc_data_buf0(15 downto 8) <= od(7) & ev(7) & od(6) & ev(6) & od(5) & ev(5) & od(4) & ev(4);
 		adc_data_buf0(7 downto 0) <= od(3) & ev(3) & od(2) & ev(2) & od(1) & ev(1) & od(0) & ev(0);    
 		adc_data_buf1 <= adc_data_buf0;
-		adc_data_buf2 <= std_logic_vector(signed(adc_data_buf1));
-		--        adc_data_buf2 <= adc_data_buf1 - (32768 -64); 
-		--        adc_data_buf3 <= adc_data_buf2;
+		adc_data_buf2 <= std_logic_vector(signed(adc_data_buf1- 32768));
 	end if;
 end process;		
 
@@ -98,7 +107,20 @@ end process;
 process(clk_250MHz)
 begin
 	if(clk_250MHz'event and clk_250MHz='1')then 
-		adc_data_buf3 <= adc_data_buf2;  
+		adc_data_buf3 <= std_logic_vector(signed(adc_data_buf2) - dc_value);  
+		
+		
+		if(n < 2048)then
+            accumulator <= accumulator + signed(adc_data_buf2);
+            n <= n + 1;
+        else
+            n <= (others=>'0');
+            accumulator <= (others=>'0');
+            dc_value <= resize(shift_right(accumulator,11),16); --divide by 2048
+        end if;
+            
+            
+		
 		adc_datab <= adc_data_buf3;
 	end if;
 end process;

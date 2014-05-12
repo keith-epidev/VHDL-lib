@@ -7,7 +7,7 @@ use work.VHDL_lib.all;
 
 entity debounce is
 	generic(
-		delay:integer := 500000
+		delay:integer := 500000*2
 	);
 	port(
 		 clk: in std_logic;
@@ -17,60 +17,74 @@ entity debounce is
 end debounce;
 
 architecture Behavioral of debounce is
-	signal enable : std_logic;
-	signal pulse : std_logic;
 	signal press : std_logic;
-    signal hold : std_logic;
-    signal hold_check : std_logic;
-    signal hold_pulse: std_logic;
-    signal rapid_pulse: std_logic;
-    signal rapid_enable: std_logic;
+
+	signal debounce_enable : std_logic;
+	signal debounce_pulse : std_logic;
+
+	signal hold_check : std_logic;
+	signal hold_pulse: std_logic;
+
+--	signal rapid_pulse: std_logic;
+--	signal rapid_enable: std_logic;
+
+
+    type states is (idle,wait_noise,check,debounced,holding,held);
+    signal state : states := idle;
 
 begin
 	
 output <= press;
 
-pulser1: pulser generic map(delay=>delay) port map(clk,enable,pulse);
-pulser2: pulser generic map(delay=>100000000) port map(clk,hold_check,hold_pulse);
-pulser3: pulser generic map(delay=>50000) port map(clk,rapid_enable,rapid_pulse);
+pulser1: pulser generic map(delay=>delay) port map(clk,debounce_enable,debounce_pulse);
+pulser2: pulser generic map(delay=>delay*2) port map(clk,hold_check,hold_pulse);
 
 debounce_signal: process(clk)
 begin		
 	if(clk'event and clk = '1')then
-	
-	   if(hold_pulse = '1')then
-	       rapid_enable <= '1';
-	   end if;
-	
 
-		if(input = '1' and enable = '0' and hold = '0')then 
-			enable <= '1';
-		elsif(input = '0' and pulse = '1')then
-			enable <= '0'; 
-		elsif(rapid_pulse = '1')then	
-			 press <= '1';		
-		elsif(input = '1' and pulse = '1')then
-			enable <= '0';
-			hold <= '1';
-			press <= '1';
-			hold_check <= '1'; --start counting hold time
-			
-	   elsif(hold = '1' and input='0' and pulse = '0')then
-        hold <= '0';
-        enable <= '0';
-          rapid_enable <= '0';
-          	hold_check <= '0';	
-		end if;
 
-		if(press = '1') then
-			press <= '0';
-		end if;
+		case state is
+			when idle =>
+				debounce_enable <= '0';
+				hold_check <= '0';
+				press <= '0';
 
+				if(input = '1')then
+					state <= wait_noise;
+				end if;
+			when wait_noise =>
+				debounce_enable <= '1';
+
+				if(debounce_pulse = '1')then
+					state <= check;
+				end if;
+			when check =>
+				if(input = '1')then
+					state <= debounced;
+				else
+					state <= idle;
+				end if;
+			when debounced =>
+				press <= '1';
+				state <= holding;
+			when holding =>
+				press <= '0';
+				hold_check <= '1';
+				if(hold_pulse = '1')then
+					state <= held;
+				end if;
+			when held =>
+				if(input = '1')then
+					state <= debounced;
+				else
+					state <= idle;
+				end if;
+
+			end case;
 
 
 	end if;
-	
-
 end process;
 
 end Behavioral;

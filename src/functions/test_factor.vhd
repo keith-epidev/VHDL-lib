@@ -3,7 +3,7 @@ function test_factor(input:std_logic_vector; value: integer; factor: integer) re
 	begin
 
 	for f in 0 to factor loop
-		if(input = (f*value)/factor )then
+		if(to_integer(unsigned(input)) = (f*value)/factor )then
 			result := true;
 		end if;
 	end loop;
