@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.VHDL_lib.all;
 
@@ -21,7 +22,7 @@ end audio;
 architecture Behavioral of audio is
 
    -- signal clkb:  std_logic;
-   -- signal dclkb:  std_logic := '0';
+    --signal dclkb:  std_logic := '0';
     signal mclkb:  std_logic := '0';
     signal bclkb:  std_logic := '0';
     signal lrclkb:  std_logic := '0';
@@ -39,10 +40,10 @@ lrclk <= lrclkb;
 adc_sdatab <= adc_sdata;
 dac_sdata <= dac_sdatab;
 
---dclk_div: clk_div generic map(	div=>16 ) port map( input=> clk, output=> dclkb);
-mclk_div: clk_div generic map(	div=>8 ) port map( input=> clk, output=> mclkb,state=>open);
-bclk_div: clk_div generic map(	div=>8 ) port map( input=> mclkb, output=> bclkb,state=>open);
-lrclk_div: clk_div generic map(	div=>32 ) port map( input=> bclkb, output=> lrclkb,state=>index);
+--dclk_div: clk_div generic map(	div=>3 ) port map( input=> clk, output=> dclkb);
+mclk_div: clk_div generic map(	div=>8*2 ) port map( input=> clk, output=> mclkb,state=>open);
+bclk_div: clk_div generic map(	div=>8*2 ) port map( input=> mclkb, output=> bclkb,state=>open);
+lrclk_div: clk_div generic map(	div=>32*2 ) port map( input=> bclkb, output=> lrclkb,state=>index);
 
 
 

@@ -59,7 +59,6 @@ architecture Behavioral of top is
     constant audio_ch_bits: integer := 24;
 
     --clocks
-    signal clk_100MHz: std_logic := '0';
     signal clk_250MHz: std_logic := '0';
   
     --button
@@ -67,7 +66,7 @@ architecture Behavioral of top is
 
     --dds
     signal valid : std_logic;
-    signal phase : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned(1200,32));
+    signal phase : std_logic_vector(23 downto 0) := std_logic_vector(to_unsigned(1200,24));
     signal dds_out: std_logic_vector(31 downto 0);
     alias  sine_raw: std_logic_vector(15 downto 0) is dds_out(15 downto 0);
     alias  cosine_raw: std_logic_vector(15 downto 0) is dds_out(31 downto 16);
@@ -97,7 +96,6 @@ architecture Behavioral of top is
       port (
         clk_raw : in STD_LOGIC;
         clk_250MHz : out STD_LOGIC;
-        clk_100MHz : out STD_LOGIC;
         locked : out STD_LOGIC
       );
     end component;
@@ -107,7 +105,7 @@ architecture Behavioral of top is
       PORT (
         aclk : IN STD_LOGIC;
         s_axis_phase_tvalid : IN STD_LOGIC;
-        s_axis_phase_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+        s_axis_phase_tdata : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
         m_axis_data_tvalid : OUT STD_LOGIC;
         m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
       );
@@ -120,17 +118,17 @@ begin
 clatch <= '1';
 cdata <= '1';
 
-clk_base1: clk_base port map(clk_raw, clk_250MHz, clk_100MHz, open);
+clk_base1: clk_base port map(clk_raw, clk_250MHz, open);
 
-dbounce1: debounce port map(clk_100MHz, btn(0), dbtn(0));
-dbounce2: debounce port map(clk_100MHz, btn(4), dbtn(4));
-dbounce3: debounce port map(clk_100MHz, btn(1), dbtn(1));
-dbounce4: debounce port map(clk_100MHz, btn(3), dbtn(3));
+dbounce1: debounce port map(clk_250MHz, btn(0), dbtn(0));
+dbounce2: debounce port map(clk_250MHz, btn(4), dbtn(4));
+dbounce3: debounce port map(clk_250MHz, btn(1), dbtn(1));
+dbounce4: debounce port map(clk_250MHz, btn(3), dbtn(3));
 
    
 sig_gen: dds
     port map (
-        aclk => clk_100MHz,
+        aclk => clk_250MHz,
         s_axis_phase_tvalid => '1',
         s_axis_phase_tdata => phase,
         m_axis_data_tvalid => valid,
@@ -156,7 +154,7 @@ audio1: audio
 
 i2c1: i2c
 	port map(
-		clk=>clk_100MHz,
+		clk=>clk_250MHz,
 		data=>i2c_data,
 		ready=>i2c_ready,
 		valid=>i2c_valid,
@@ -174,9 +172,9 @@ audio_i2c_drv1: audio_i2c_drv
 	);
 
 
-process(clk_100MHz)
+process(clk_250MHz)
 begin		
-	if(clk_100MHz'event and clk_100MHz = '1')then
+	if(clk_250MHz'event and clk_250MHz = '1')then
 	audio_input(23 downto 8) <= sine_raw;
 	audio_input(7 downto 0) <= (others=>'0');--std_logic_vector(resize(signed(sine_raw),audio_ch_bits));
 	
@@ -198,9 +196,9 @@ ja(8) <= '0';
 ja(9) <= sdab;
 ja(10) <= sckb;
 
-process(clk_100MHz)
+process(clk_250MHz)
 begin		
-	if(clk_100MHz'event and clk_100MHz = '1')then
+	if(clk_250MHz'event and clk_250MHz = '1')then
 
         if(sdab = '0')then
             sda <= '0';

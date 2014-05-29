@@ -17,7 +17,7 @@ architecture Behavioral of audio_i2c_drv is
     type states is (startup, idle, deliver, stall, complete);  --type of state machine.
     signal state : states;
     signal payload : std_logic_vector(31 downto 0);
-    signal delay : std_logic_vector(log2(200) downto 0) := (others=>'0');
+    signal delay : std_logic_vector(log2(200*250) downto 0) := (others=>'0');
     signal index: integer := 0;
     signal cclkb: std_logic;
     

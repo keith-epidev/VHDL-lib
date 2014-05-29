@@ -25,7 +25,7 @@ architecture Behavioral of spi is
 begin
 
 
-clk_div1: clk_div generic map(	div=>1000 ) port map( input=> clk, output=> cclkb);
+clk_div1: clk_div generic map(	div=>2000 ) port map( input=> clk, output=> cclkb);
 cclk <= cclkb;
 
 process(cclkb)

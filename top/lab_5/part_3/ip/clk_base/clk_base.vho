@@ -54,8 +54,7 @@
 --  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 --   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 ------------------------------------------------------------------------------
--- CLK_OUT1___100.000______0.000______50.0______130.958_____98.575
--- CLK_OUT2___250.000______0.000______50.0______110.209_____98.575
+-- CLK_OUT1___250.000______0.000______50.0______110.209_____98.575
 --
 ------------------------------------------------------------------------------
 -- Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -70,7 +69,6 @@ port
  (-- Clock in ports
   clk_raw           : in     std_logic;
   -- Clock out ports
-  clk_100MHz          : out    std_logic;
   clk_250MHz          : out    std_logic;
   -- Status and control signals
   locked            : out    std_logic
@@ -82,7 +80,7 @@ ATTRIBUTE SYN_BLACK_BOX OF clk_base : COMPONENT IS TRUE;
 
 
 ATTRIBUTE BLACK_BOX_PAD_PIN : STRING;
-ATTRIBUTE BLACK_BOX_PAD_PIN OF clk_base : COMPONENT IS "clk_raw,clk_100MHz,clk_250MHz,locked";
+ATTRIBUTE BLACK_BOX_PAD_PIN OF clk_base : COMPONENT IS "clk_raw,clk_250MHz,locked";
 
 -- COMP_TAG_END ------ End COMPONENT Declaration ------------
 -- The following code must appear in the VHDL architecture
@@ -94,7 +92,6 @@ your_instance_name : clk_base
    -- Clock in ports
    clk_raw => clk_raw,
   -- Clock out ports  
-   clk_100MHz => clk_100MHz,
    clk_250MHz => clk_250MHz,
   -- Status and control signals                
    locked => locked            

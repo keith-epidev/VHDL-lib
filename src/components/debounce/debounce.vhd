@@ -7,7 +7,7 @@ use work.VHDL_lib.all;
 
 entity debounce is
 	generic(
-		delay:integer := 500000*2
+		delay:integer := 50000
 	);
 	port(
 		 clk: in std_logic;

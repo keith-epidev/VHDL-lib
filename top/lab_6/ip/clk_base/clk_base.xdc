@@ -53,7 +53,7 @@
 #----------------------------------------------------------------
 # Connect to input port when clock capable pin is selected for input
 create_clock -period 10.0 [get_ports clk_raw]
-set_input_jitter [get_clocks -of_objects [get_ports clk_raw]] 0.1
+set_input_jitter [get_clocks -of_objects [get_ports clk_raw]] 0.10000000000000001
 
 
 

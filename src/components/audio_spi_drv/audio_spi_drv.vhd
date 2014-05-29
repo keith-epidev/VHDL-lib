@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.VHDL_lib.all;
 
@@ -13,10 +14,10 @@ entity audio_spi_drv is
 end audio_spi_drv;
 
 architecture Behavioral of audio_spi_drv is
-    type states is (startup, idle, deliver, stall, complete);  --type of state machine.
+    type states is (startup, idle, deliver, accepted, stall, complete);  --type of state machine.
     signal state : states;
     signal payload : std_logic_vector(31 downto 0);
-    signal delay : std_logic_vector(log2(100) downto 0) := (others=>'0');
+    signal delay : std_logic_vector(log2(1000) downto 0) := (others=>'0');
     signal index: integer := 0;
     signal cclkb: std_logic;
     
@@ -59,7 +60,7 @@ begin
     case state is
             when startup=>
             delay <= delay + 1;
-            if(delay > 100)then
+            if(delay > 1000)then
                 state <= idle;
             end if;
         when idle=>
@@ -73,17 +74,26 @@ begin
             payload <= instructions(index);
             valid <= '1';               
             index <= index + 1;      
-            state <= stall;                   
+            state <= accepted;                   
          
+        when accepted=> 
+            if(ready = '0')then
+                state <= stall;
+                valid <= '0';
+            end if;
         when stall=> 
-            delay <= delay + 1;
-                if(delay > 100)then
-                    if(ready = '0')then
+            
+              
+             if(ready = '1')then  
+                    delay <= delay + 1;
+                    if(delay > 20)then
+               
                         if( index <= 20 )then
                          state <= idle;                   
                         else
                            state <= complete;                 
                         end if;
+                            
                     end if;  
                 end if;  
         when complete=>            

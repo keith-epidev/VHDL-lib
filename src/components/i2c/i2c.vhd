@@ -30,7 +30,7 @@ architecture Behavioral of i2c is
 begin
 
 
-clk_div1: clk_div generic map(	div=>1000 ) port map( input=> clk, output=> clkb);
+clk_div1: clk_div generic map(	div=>2500 ) port map( input=> clk, output=> clkb, state=>open);
 
 
 

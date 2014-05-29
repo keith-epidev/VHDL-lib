@@ -21,11 +21,10 @@ entity fft is
 end fft;
 
 architecture Behavioral of fft is
-    constant delay_length: integer := 8;
     constant fft_size: integer := 4096;
     constant xwidth : integer := log2(vga_width);
     constant ywidth : integer := log2(vga_height);
-    constant smooth_factor:integer := 8;
+    constant smooth_factor:integer := 6;
 
      -----------------------------------------------------------------------
      -- DUT signals
@@ -65,8 +64,7 @@ architecture Behavioral of fft is
      alias fft_out_im : std_logic_vector(28 downto 0) is m_axis_data_tdata(60 downto 32);
      alias fft_out_index:std_logic_vector(11 downto 0) is m_axis_data_tuser(11 downto 0); 
      
-   
-     signal fft_out_index_buf:std_logic_vector(11*delay_length-1 downto 0);
+ 
      signal ch1_y_fft_in: std_logic_vector(15 downto 0);
      
     signal sqr_re_i, sqr_im_i : std_logic_vector(28 downto 0);         

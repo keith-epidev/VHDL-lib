@@ -21,7 +21,6 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
---use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.VHDL_lib.all;
@@ -57,7 +56,6 @@ architecture Behavioral of top is
     constant audio_ch_bits: integer := 24;
 
     --clocks
-    signal clk_100MHz: std_logic := '0';
     signal clk_250MHz: std_logic := '0';
   
     --button
@@ -94,7 +92,6 @@ architecture Behavioral of top is
       port (
         clk_raw : in STD_LOGIC;
         clk_250MHz : out STD_LOGIC;
-        clk_100MHz : out STD_LOGIC;
         locked : out STD_LOGIC
       );
     end component;
@@ -114,17 +111,17 @@ architecture Behavioral of top is
 begin
 
 
-clk_base1: clk_base port map(clk_raw, clk_250MHz, clk_100MHz, open);
+clk_base1: clk_base port map(clk_raw, clk_250MHz, open);
 
-dbounce1: debounce port map(clk_100MHz, btn(0), dbtn(0));
-dbounce2: debounce port map(clk_100MHz, btn(4), dbtn(4));
-dbounce3: debounce port map(clk_100MHz, btn(1), dbtn(1));
-dbounce4: debounce port map(clk_100MHz, btn(3), dbtn(3));
+dbounce1: debounce port map(clk_250MHz, btn(0), dbtn(0));
+dbounce2: debounce port map(clk_250MHz, btn(4), dbtn(4));
+dbounce3: debounce port map(clk_250MHz, btn(1), dbtn(1));
+dbounce4: debounce port map(clk_250MHz, btn(3), dbtn(3));
 
    
 sig_gen: dds
     port map (
-        aclk => clk_100MHz,
+        aclk => clk_250MHz,
         s_axis_phase_tvalid => '1',
         s_axis_phase_tdata => phase,
         m_axis_data_tvalid => valid,
@@ -151,7 +148,7 @@ audio1: audio
 
 spi1: spi
 	port map(
-		clk=>clk_100MHz,
+		clk=>clk_250MHz,
 		data=>spi_data,
 		ready=>spi_ready,
 		valid=>spi_valid,
@@ -170,9 +167,9 @@ audio_spi_drv1: audio_spi_drv
 	);
 
 
-process(clk_100MHz)
+process(clk_250MHz)
 begin		
-	if(clk_100MHz'event and clk_100MHz = '1')then
+	if(clk_250MHz'event and clk_250MHz = '1')then
 	audio_input(23 downto 8) <= sine_raw;
 	audio_input(7 downto 0) <= (others=>'0');
 	

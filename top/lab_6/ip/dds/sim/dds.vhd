@@ -47,7 +47,7 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:dds_compiler:6.0
--- IP Revision: 3
+-- IP Revision: 4
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -60,7 +60,7 @@ ENTITY dds IS
   PORT (
     aclk : IN STD_LOGIC;
     s_axis_phase_tvalid : IN STD_LOGIC;
-    s_axis_phase_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+    s_axis_phase_tdata : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
     m_axis_data_tvalid : OUT STD_LOGIC;
     m_axis_data_tdata : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
   );
@@ -126,7 +126,7 @@ ARCHITECTURE dds_arch OF dds IS
       aresetn : IN STD_LOGIC;
       s_axis_phase_tvalid : IN STD_LOGIC;
       s_axis_phase_tready : OUT STD_LOGIC;
-      s_axis_phase_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+      s_axis_phase_tdata : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
       s_axis_phase_tlast : IN STD_LOGIC;
       s_axis_phase_tuser : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
       s_axis_config_tvalid : IN STD_LOGIC;
@@ -165,7 +165,7 @@ BEGIN
       C_XDEVICEFAMILY => "zynq",
       C_MODE_OF_OPERATION => 0,
       C_MODULUS => 9,
-      C_ACCUMULATOR_WIDTH => 32,
+      C_ACCUMULATOR_WIDTH => 22,
       C_CHANNELS => 1,
       C_HAS_PHASE_OUT => 0,
       C_HAS_PHASEGEN => 1,
@@ -193,7 +193,7 @@ BEGIN
       C_HAS_TLAST => 0,
       C_HAS_TREADY => 0,
       C_HAS_S_PHASE => 1,
-      C_S_PHASE_TDATA_WIDTH => 32,
+      C_S_PHASE_TDATA_WIDTH => 24,
       C_S_PHASE_HAS_TUSER => 0,
       C_S_PHASE_TUSER_WIDTH => 1,
       C_HAS_S_CONFIG => 0,

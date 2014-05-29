@@ -230,7 +230,7 @@ end component;
 
 component debounce is
 	generic(
-		delay:integer := 500000*2
+		delay:integer := 50000
 	);
 	port(
 		 clk: in std_logic;
@@ -312,6 +312,18 @@ component HALF_ADDER is
 	port (
 		A,B : in std_logic; 
 		SUM,CARRY : out std_logic
+	);
+end component;
+
+component dmod is
+	generic(
+		width:integer := 16
+	);
+	port(
+		 clk: in std_logic;
+		 I: in std_logic_vector(width-1 downto 0);
+		 Q: in std_logic_vector(width-1 downto 0);
+		 output: out std_logic_vector(width-1 downto 0)
 	);
 end component;
 

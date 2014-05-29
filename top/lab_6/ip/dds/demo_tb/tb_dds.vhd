@@ -92,7 +92,7 @@ architecture tb of tb_dds is
 
   -- Phase slave channel signals
   signal s_axis_phase_tvalid             : std_logic := '0';  -- payload is valid
-  signal s_axis_phase_tdata              : std_logic_vector(31 downto 0) := (others => '0');  -- data payload
+  signal s_axis_phase_tdata              : std_logic_vector(23 downto 0) := (others => '0');  -- data payload
 
   -- Data master channel signals
   signal m_axis_data_tvalid              : std_logic := '0';  -- payload is valid
@@ -106,7 +106,7 @@ architecture tb of tb_dds is
   -----------------------------------------------------------------------
 
   -- Phase slave channel alias signals
-  signal s_axis_phase_tdata_inc        : std_logic_vector(31 downto 0) := (others => '0');
+  signal s_axis_phase_tdata_inc        : std_logic_vector(21 downto 0) := (others => '0');
 
   -- Data master channel alias signals
   signal m_axis_data_tdata_cosine      : std_logic_vector(15 downto 0) := (others => '0');
@@ -165,7 +165,7 @@ begin
     for cycle in 0 to 159 loop
       s_axis_phase_tvalid  <= '1';
       s_axis_phase_tdata <= (others => '0');  -- set unused TDATA bits to zero
-      s_axis_phase_tdata(31 downto 0) <= "00000000000000000000000000000000";  -- constant phase increment
+      s_axis_phase_tdata(21 downto 0) <= "0000000000000000000000";  -- constant phase increment
       wait for CLOCK_PERIOD;
     end loop;
     s_axis_phase_tvalid <= '0';
@@ -212,7 +212,7 @@ begin
   -----------------------------------------------------------------------
 
   -- Phase slave channel alias signals
-  s_axis_phase_tdata_inc        <= s_axis_phase_tdata(31 downto 0);
+  s_axis_phase_tdata_inc        <= s_axis_phase_tdata(21 downto 0);
 
   -- Data master channel alias signals: update these only when they are valid
   m_axis_data_tdata_cosine      <= m_axis_data_tdata(15 downto 0) when m_axis_data_tvalid = '1';

@@ -1,9 +1,9 @@
-// Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
-// Date        : Thu Apr 17 01:08:39 2014
+// Tool Version: Vivado v.2014.1 (lin64) Build 881834 Fri Apr  4 14:00:25 MDT 2014
+// Date        : Tue May 13 22:55:34 2014
 // Host        : macbook running 64-bit Arch Linux
-// Command     : write_verilog -force -mode funcsim /home/keith/Documents/VHDL-lib/top/test/ip/clk_base/clk_base_funcsim.v
+// Command     : write_verilog -force -mode funcsim /home/keith/Documents/VHDL-lib/top/lab_6/ip/clk_base/clk_base_funcsim.v
 // Design      : clk_base
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -11,44 +11,35 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* core_generation_info = "clk_base,clk_wiz_v5_1,{component_name=clk_base,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=2,clkin1_period=10.0,clkin2_period=10.0,use_power_down=false,use_reset=false,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *) 
+(* core_generation_info = "clk_base,clk_wiz_v5_1,{component_name=clk_base,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=10.0,clkin2_period=10.0,use_power_down=false,use_reset=false,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *) 
 (* NotValidForBitStream *)
 module clk_base
    (clk_raw,
-    clk_100MHz,
     clk_250MHz,
     locked);
   input clk_raw;
-  output clk_100MHz;
   output clk_250MHz;
   output locked;
 
-  wire clk_100MHz;
   wire clk_250MHz;
 (* IBUF_LOW_PWR *)   wire clk_raw;
   wire locked;
 
 clk_baseclk_base_clk_wiz U0
-       (.clk_100MHz(clk_100MHz),
-        .clk_250MHz(clk_250MHz),
+       (.clk_250MHz(clk_250MHz),
         .clk_raw(clk_raw),
         .locked(locked));
 endmodule
 
+(* ORIG_REF_NAME = "clk_base_clk_wiz" *) 
 module clk_baseclk_base_clk_wiz
    (clk_raw,
-    clk_100MHz,
     clk_250MHz,
     locked);
   input clk_raw;
-  output clk_100MHz;
   output clk_250MHz;
   output locked;
 
-  wire \<const0> ;
-  wire \<const1> ;
-  wire clk_100MHz;
-  wire clk_100MHz_clk_base;
   wire clk_250MHz;
   wire clk_250MHz_clk_base;
 (* IBUF_LOW_PWR *)   wire clk_raw;
@@ -60,6 +51,7 @@ module clk_baseclk_base_clk_wiz
   wire NLW_mmcm_adv_inst_CLKFBSTOPPED_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKINSTOPPED_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED;
+  wire NLW_mmcm_adv_inst_CLKOUT1_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT2_UNCONNECTED;
   wire NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED;
@@ -72,10 +64,6 @@ module clk_baseclk_base_clk_wiz
   wire NLW_mmcm_adv_inst_PSDONE_UNCONNECTED;
   wire [15:0]NLW_mmcm_adv_inst_DO_UNCONNECTED;
 
-GND GND
-       (.G(\<const0> ));
-VCC VCC
-       (.P(\<const1> ));
 (* box_type = "PRIMITIVE" *) 
    BUFG clkf_buf
        (.I(clkfbout_clk_base),
@@ -91,10 +79,6 @@ VCC VCC
         .O(clk_raw_clk_base));
 (* box_type = "PRIMITIVE" *) 
    BUFG clkout1_buf
-       (.I(clk_100MHz_clk_base),
-        .O(clk_100MHz));
-(* box_type = "PRIMITIVE" *) 
-   BUFG clkout2_buf
        (.I(clk_250MHz_clk_base),
         .O(clk_250MHz));
 (* box_type = "PRIMITIVE" *) 
@@ -105,11 +89,11 @@ VCC VCC
     .CLKFBOUT_USE_FINE_PS("FALSE"),
     .CLKIN1_PERIOD(10.000000),
     .CLKIN2_PERIOD(0.000000),
-    .CLKOUT0_DIVIDE_F(10.000000),
+    .CLKOUT0_DIVIDE_F(4.000000),
     .CLKOUT0_DUTY_CYCLE(0.500000),
     .CLKOUT0_PHASE(0.000000),
     .CLKOUT0_USE_FINE_PS("FALSE"),
-    .CLKOUT1_DIVIDE(4),
+    .CLKOUT1_DIVIDE(1),
     .CLKOUT1_DUTY_CYCLE(0.500000),
     .CLKOUT1_PHASE(0.000000),
     .CLKOUT1_USE_FINE_PS("FALSE"),
@@ -153,12 +137,12 @@ VCC VCC
         .CLKFBOUTB(NLW_mmcm_adv_inst_CLKFBOUTB_UNCONNECTED),
         .CLKFBSTOPPED(NLW_mmcm_adv_inst_CLKFBSTOPPED_UNCONNECTED),
         .CLKIN1(clk_raw_clk_base),
-        .CLKIN2(\<const0> ),
-        .CLKINSEL(\<const1> ),
+        .CLKIN2(1'b0),
+        .CLKINSEL(1'b1),
         .CLKINSTOPPED(NLW_mmcm_adv_inst_CLKINSTOPPED_UNCONNECTED),
-        .CLKOUT0(clk_100MHz_clk_base),
+        .CLKOUT0(clk_250MHz_clk_base),
         .CLKOUT0B(NLW_mmcm_adv_inst_CLKOUT0B_UNCONNECTED),
-        .CLKOUT1(clk_250MHz_clk_base),
+        .CLKOUT1(NLW_mmcm_adv_inst_CLKOUT1_UNCONNECTED),
         .CLKOUT1B(NLW_mmcm_adv_inst_CLKOUT1B_UNCONNECTED),
         .CLKOUT2(NLW_mmcm_adv_inst_CLKOUT2_UNCONNECTED),
         .CLKOUT2B(NLW_mmcm_adv_inst_CLKOUT2B_UNCONNECTED),
@@ -167,20 +151,20 @@ VCC VCC
         .CLKOUT4(NLW_mmcm_adv_inst_CLKOUT4_UNCONNECTED),
         .CLKOUT5(NLW_mmcm_adv_inst_CLKOUT5_UNCONNECTED),
         .CLKOUT6(NLW_mmcm_adv_inst_CLKOUT6_UNCONNECTED),
-        .DADDR({\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> }),
-        .DCLK(\<const0> ),
-        .DEN(\<const0> ),
-        .DI({\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> ,\<const0> }),
+        .DADDR({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
+        .DCLK(1'b0),
+        .DEN(1'b0),
+        .DI({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
         .DO(NLW_mmcm_adv_inst_DO_UNCONNECTED[15:0]),
         .DRDY(NLW_mmcm_adv_inst_DRDY_UNCONNECTED),
-        .DWE(\<const0> ),
+        .DWE(1'b0),
         .LOCKED(locked),
-        .PSCLK(\<const0> ),
+        .PSCLK(1'b0),
         .PSDONE(NLW_mmcm_adv_inst_PSDONE_UNCONNECTED),
-        .PSEN(\<const0> ),
-        .PSINCDEC(\<const0> ),
-        .PWRDWN(\<const0> ),
-        .RST(\<const0> ));
+        .PSEN(1'b0),
+        .PSINCDEC(1'b0),
+        .PWRDWN(1'b0),
+        .RST(1'b0));
 endmodule
 `ifndef GLBL
 `define GLBL

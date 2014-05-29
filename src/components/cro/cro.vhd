@@ -129,24 +129,24 @@ begin
 
 
 ---- generate VGA driver for 1920 display --
---vga_gen1: if ( vga_width = 1920 ) GENERATE
+vga_gen1: if ( vga_width = 1920 ) GENERATE
 
---	clk_video1: clk_193MHz port map(clk_100MHz, clk_video, open);
+	clk_video1: clk_193MHz port map(clk_100MHz, clk_video, open);
 
---	vga1: vga 
---	generic map(
---		Hsync=> 208,
---		Hact=> 1920,
---		Hfp=>128,
---		Hbp=>336,
+	vga1: vga 
+	generic map(
+		Hsync=> 208,
+		Hact=> 1920,
+		Hfp=>128,
+		Hbp=>336,
 
---		Vsync=>3,
---		Vact=> 1200,
---		Vfp=> 1,
---		Vbp=> 38) 
---	port map( clk_video, hscnt,vscnt,VGA_HSYNC, VGA_VSYNC);
+		Vsync=>3,
+		Vact=> 1200,
+		Vfp=> 1,
+		Vbp=> 38) 
+	port map( clk_video, hscnt,vscnt,VGA_HSYNC, VGA_VSYNC);
 	
---END GENERATE vga_gen1;
+END GENERATE vga_gen1;
 
 
 -- generate VGA driver for 1280 display --
@@ -172,24 +172,24 @@ END GENERATE vga_gen2;
 
 
 -- generate VGA driver for 1280 display --
-vga_gen3: if ( vga_width = 1920 ) GENERATE
+--vga_gen3: if ( vga_width = 1920 ) GENERATE
 
-	clk_video1: clk_182MHz port map(clk_100MHz, clk_video, open);
+--	clk_video1: clk_182MHz port map(clk_100MHz, clk_video, open);
 
-	vga1: vga 
-	generic map(
-		Hsync=> 696,
-		Hact=> 1920,
-		Hfp=>32,
-		Hbp=>32,
+--	vga1: vga 
+--	generic map(
+--		Hsync=> 696,
+--		Hact=> 1920,
+--		Hfp=>32,
+--		Hbp=>32,
 
-		Vsync=>11,
-		Vact=> 1080,
-		Vfp=> 22,
-		Vbp=> 22) 
-	port map( clk_video, hscnt,vscnt,VGA_HSYNC, VGA_VSYNC);
+--		Vsync=>11,
+--		Vact=> 1080,
+--		Vfp=> 22,
+--		Vbp=> 22) 
+--	port map( clk_video, hscnt,vscnt,VGA_HSYNC, VGA_VSYNC);
 	
-END GENERATE vga_gen3;
+--END GENERATE vga_gen3;
 
 
 

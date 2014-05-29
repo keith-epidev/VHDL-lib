@@ -55,8 +55,7 @@
 --  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 --   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 ------------------------------------------------------------------------------
--- CLK_OUT1___100.000______0.000______50.0______130.958_____98.575
--- CLK_OUT2___250.000______0.000______50.0______110.209_____98.575
+-- CLK_OUT1___250.000______0.000______50.0______110.209_____98.575
 --
 ------------------------------------------------------------------------------
 -- Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -77,7 +76,6 @@ port
  (-- Clock in ports
   clk_raw           : in     std_logic;
   -- Clock out ports
-  clk_100MHz          : out    std_logic;
   clk_250MHz          : out    std_logic;
   -- Status and control signals
   locked            : out    std_logic
@@ -86,14 +84,13 @@ end clk_base;
 
 architecture xilinx of clk_base is
   attribute CORE_GENERATION_INFO : string;
-  attribute CORE_GENERATION_INFO of xilinx : architecture is "clk_base,clk_wiz_v5_1,{component_name=clk_base,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=2,clkin1_period=10.0,clkin2_period=10.0,use_power_down=false,use_reset=false,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}";
+  attribute CORE_GENERATION_INFO of xilinx : architecture is "clk_base,clk_wiz_v5_1,{component_name=clk_base,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=1,clkin1_period=10.0,clkin2_period=10.0,use_power_down=false,use_reset=false,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}";
 
 component clk_base_clk_wiz
 port
  (-- Clock in ports
   clk_raw           : in     std_logic;
   -- Clock out ports
-  clk_100MHz          : out    std_logic;
   clk_250MHz          : out    std_logic;
   -- Status and control signals
   locked            : out    std_logic
@@ -108,7 +105,6 @@ begin
    -- Clock in ports
    clk_raw => clk_raw,
   -- Clock out ports  
-   clk_100MHz => clk_100MHz,
    clk_250MHz => clk_250MHz,
   -- Status and control signals                
    locked => locked            

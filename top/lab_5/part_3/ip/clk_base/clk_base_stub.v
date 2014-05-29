@@ -1,9 +1,10 @@
-// Copyright 1986-1999, 2001-2013 Xilinx, Inc. All Rights Reserved.
+// Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2013.4 (lin64) Build 353583 Mon Dec  9 17:26:26 MST 2013
-// Date        : Thu Apr 17 01:08:39 2014
+// Tool Version: Vivado v.2014.1 (lin64) Build 881834 Fri Apr  4 14:00:25 MDT 2014
+// Date        : Tue May 13 23:58:38 2014
 // Host        : macbook running 64-bit Arch Linux
-// Command     : write_verilog -force -mode synth_stub /home/keith/Documents/VHDL-lib/top/test/ip/clk_base/clk_base_stub.v
+// Command     : write_verilog -force -mode synth_stub
+//               /home/keith/Documents/VHDL-lib/top/lab_5/part_3/ip/clk_base/clk_base_stub.v
 // Design      : clk_base
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7z020clg484-1
@@ -12,10 +13,9 @@
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
-module clk_base(clk_raw, clk_100MHz, clk_250MHz, locked)
-/* synthesis syn_black_box black_box_pad_pin="clk_raw,clk_100MHz,clk_250MHz,locked" */;
+module clk_base(clk_raw, clk_250MHz, locked)
+/* synthesis syn_black_box black_box_pad_pin="clk_raw,clk_250MHz,locked" */;
   input clk_raw;
-  output clk_100MHz;
   output clk_250MHz;
   output locked;
 endmodule
